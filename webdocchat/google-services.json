@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "788347610980",
+    "firebase_url": "https://webdocdoctorsdk.firebaseio.com",
+    "project_id": "webdocdoctorsdk",
+    "storage_bucket": "webdocdoctorsdk.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:788347610980:android:4b91a247677c1a375cfc71",
+        "android_client_info": {
+          "package_name": "com.webdocdoctorsdk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "788347610980-agjfu0f3booraskgel6jq3njav052q0g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWhpWnFmjGfkBEfLe2PfuypOYyGcH84LA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "788347610980-agjfu0f3booraskgel6jq3njav052q0g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
