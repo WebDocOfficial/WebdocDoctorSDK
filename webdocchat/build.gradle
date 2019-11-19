@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion "28.0.3"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.0"
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 28
+        minSdkVersion 16
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
 
@@ -26,9 +26,9 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:28.+'
-    compile 'com.android.support:support-v13:28.+'
-    compile 'com.android.support:support-v4:28.+'
+    compile 'com.android.support:appcompat-v7:26.+'
+    compile 'com.android.support:support-v13:26.+'
+    compile 'com.android.support:support-v4:26.+'
     compile 'com.google.android.gms:play-services-gcm:15.0.1'
     compile 'com.google.firebase:firebase-messaging:17.3.4'
     compile 'com.google.firebase:firebase-core:16.0.4'
