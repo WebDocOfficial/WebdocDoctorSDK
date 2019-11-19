@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:788347610980:android:4b91a247677c1a375cfc71",
+        "mobilesdk_app_id": "1:788347610980:android:cfea43ffde6fb4e25cfc71",
         "android_client_info": {
-          "package_name": "com.webdocdoctorsdk"
+          "package_name": "com.webdocchat"
         }
       },
       "oauth_client": [
