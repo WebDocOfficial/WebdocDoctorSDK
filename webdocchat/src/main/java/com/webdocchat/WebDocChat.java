@@ -3,6 +3,8 @@ package com.webdocchat;
 import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.util.Log;
+
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -44,6 +46,106 @@ import retrofit2.Response;
 
 
 public class WebDocChat {
+
+    /*private static void FirebaseChatUsers(DatabaseReference reference, final ArrayList chatIDs)
+    {
+        reference.child("Users").child("PTCLHealth").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                //GlobalNew.ListUsers.clear();
+
+                int i = 0;
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren())
+                {
+                    String firebaseID = (String) snapshot.child("firebaseID").getValue();
+                    String userID = (String) snapshot.child("userID").getValue();
+                    String userName = (String) snapshot.child("userName").getValue();
+                    String status = (String) snapshot.child("status").getValue();
+                    Long lastSeen = (Long) snapshot.child("lastSeen").getValue();
+
+                    User user = new User(firebaseID, userID, userName, status, lastSeen);
+                    //Toast.makeText(_MainActivity.this, user.getUsername(), Toast.LENGTH_SHORT).show();
+                    Log.e("NAME------",user.getUsername());
+
+                    if(chatIDs.contains(snapshot.getKey()))
+                    {
+                        GlobalNew.ListUsers.add(user);
+                        i++;
+                    }
+
+                    if (i == chatIDs.size())
+                    {
+                        if(!loadFirstTime)
+                        {
+                            loadFirstTime = true;
+                            selectFirstItemAsDefault();
+                            //GlobalNew.utils.dismissLoadingPopup();
+                        }
+
+                            *//* Updating adapter *//*
+                        if(GlobalNew.isUserInChat)
+                        {
+                            ChatFragment.usersAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public static void firebaseUsersforDoctors(Context context, String doctorID)
+    {
+        final ArrayList chatIDs = new ArrayList();
+
+        final WebdocChatUsersInterface webdocChatUsersInterface = (WebdocChatUsersInterface) context;
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        reference.child("Chat").child(doctorID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                if(dataSnapshot.getChildrenCount() == 0)
+                {
+                    webdocChatUsersInterface.ChatUsers(null);
+                    *//*loadFirstTime = true;
+                    selectFirstItemAsDefault();*//*
+                    //GlobalNew.utils.dismissLoadingPopup();
+                }
+                else {
+                    //GlobalNew.ListUsers.clear();
+                    //chatIDs.clear();
+
+                    int i = 0;
+                    int size = (int) dataSnapshot.getChildrenCount();
+
+                    for (final DataSnapshot snapshot : dataSnapshot.getChildren())
+                    {
+                        chatIDs.add(snapshot.getKey());
+                        i++;
+
+                        if (i == size) {
+                            FirebaseChatUsers(chatIDs);
+                        }
+                    }
+                }
+
+                *//*UsersAdapter usersAdapter = new UsersAdapter(ListUsers, true);
+                userRecyclerView.setAdapter(usersAdapter);*//*
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }*/
 
     public static void uploadFile(final String senderAppName, final String receiverAppName, Uri fileUri, final String sender, final String receiver, final String type) {
 
@@ -353,10 +455,10 @@ public class WebDocChat {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         ChatUserModel user = new ChatUserModel();
 
-                        user.setFirebaseEmail(snapshot.getKey());
+                        user.setFirebaseID(snapshot.getKey());
                         // Toast.makeText(UserDashboardActivity.this, snapshot.getKey(), Toast.LENGTH_SHORT).show();
-                        user.setName(snapshot.child("name").getValue().toString());
-                        user.setEmail(snapshot.child("email").getValue().toString());
+                        user.setUserName(snapshot.child("name").getValue().toString());
+                        user.setUserID(snapshot.child("email").getValue().toString());
                         user.setStatus(snapshot.child("status").getValue().toString());
                         user.setAppName(String.valueOf(R.string.app_name));
                         Global.ChatUsersList.add(user);
@@ -387,9 +489,9 @@ public class WebDocChat {
 
                                             ChatUserModel tempUser = new ChatUserModel();
                                             tempUser.setStatus(dataSnapshot.child("status").getValue().toString());
-                                            tempUser.setName(dataSnapshot.child("username").getValue().toString());
+                                            tempUser.setUserName(dataSnapshot.child("username").getValue().toString());
                                             tempUser.setAppName(snapshot.getKey());
-                                            tempUser.setFirebaseEmail(snapshot1.getKey());
+                                            tempUser.setFirebaseID(snapshot1.getKey());
                                             Global.ChatUsersList.add(tempUser);
                                        /*Toast.makeText(getActivity(), Global.chatUsersList.toString(), Toast.LENGTH_LONG).show();*/
                                            /* if (ChatUsersListFrag.adapter != null) {

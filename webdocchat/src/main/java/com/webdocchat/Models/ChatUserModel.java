@@ -6,19 +6,68 @@ package com.webdocchat.Models;
 
 public class ChatUserModel {
 
-    private String Name;
-    private String Email;
-    private String Status;
-    private String FirebaseEmail;
+    private String userName;
+    private String userID;
+    private String firebaseID;
+    private String status;
+    private String lastSeen;
     private String appName;
 
+    public String getUserName() {
+        return userName;
+    }
 
-    public String getName() {
-        return Name;
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
+    public String getFirebaseID() {
+        return firebaseID;
+    }
+
+    public void setFirebaseID(String firebaseID) {
+        this.firebaseID = firebaseID;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getLastSeen() {
+        return lastSeen;
+    }
+
+    public void setLastSeen(String lastSeen) {
+        this.lastSeen = lastSeen;
+    }
+
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
+
+
+    /*public String getName() {
+        return userName;
     }
 
     public void setName(String doctorName) {
-        Name = doctorName;
+        userName = doctorName;
     }
 
     public String getEmail() {
@@ -51,5 +100,5 @@ public class ChatUserModel {
 
     public void setAppName(String appName) {
         this.appName = appName;
-    }
+    }*/
 }
