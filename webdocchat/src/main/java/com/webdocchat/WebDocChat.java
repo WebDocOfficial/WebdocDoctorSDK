@@ -402,16 +402,11 @@ public class WebDocChat {
 
     public static void registerUserForChat(Context context, final String appName, final String name, final String email, final String password) {
 
-        FirebaseOptions options = new FirebaseOptions.Builder()
-                .setApiKey("AIzaSyAWhpWnFmjGfkBEfLe2PfuypOYyGcH84LA")
-                .setApplicationId("1:788347610980:android:cfea43ffde6fb4e25cfc71")
-                .setDatabaseUrl("https://webdocdoctorsdk.firebaseio.com")
-                .build();
+        FirebaseApp appReference = DatabaseReference(context);
 
-        FirebaseApp secondApp = FirebaseApp.initializeApp(context, options, "second app");
-        final FirebaseDatabase secondDatabase = FirebaseDatabase.getInstance(secondApp);
+        final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
 
-        final FirebaseAuth mAuth = com.google.firebase.auth.FirebaseAuth.getInstance(secondApp);
+        final FirebaseAuth mAuth = com.google.firebase.auth.FirebaseAuth.getInstance(appReference);
 
         //final FirebaseAuth mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
         final RegisterUserForChatInterface registerUserForChatInterface = (RegisterUserForChatInterface) context;
@@ -421,7 +416,7 @@ public class WebDocChat {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             //DatabaseReference firebaseDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child(appName).child(email.replace(".", ""));
-                            DatabaseReference firebaseDatabaseReference = secondDatabase.getReference("Users").child(appName).child(email.replace(".", ""));
+                            DatabaseReference firebaseDatabaseReference = reference.getReference("Users").child(appName).child(email.replace(".", ""));
                             HashMap<String, String> hashMap = new HashMap<String, String>();
                             hashMap.put("name", name);
                             hashMap.put("email", email);
@@ -541,6 +536,19 @@ public class WebDocChat {
         }
 
 
+    }
+
+    private static FirebaseApp DatabaseReference(Context context)
+    {
+        FirebaseOptions options = new FirebaseOptions.Builder()
+                .setApiKey("AIzaSyAWhpWnFmjGfkBEfLe2PfuypOYyGcH84LA")
+                .setApplicationId("1:788347610980:android:cfea43ffde6fb4e25cfc71")
+                .setDatabaseUrl("https://webdocdoctorsdk.firebaseio.com")
+                .build();
+
+        FirebaseApp secondApp = FirebaseApp.initializeApp(context, options, "second app");
+
+        return secondApp;
     }
 
 }
