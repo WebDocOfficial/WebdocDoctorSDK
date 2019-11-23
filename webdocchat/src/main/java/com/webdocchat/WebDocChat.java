@@ -8,6 +8,8 @@ import android.util.Log;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
@@ -399,14 +401,27 @@ public class WebDocChat {
     }
 
     public static void registerUserForChat(Context context, final String appName, final String name, final String email, final String password) {
-        final FirebaseAuth mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
+
+        FirebaseOptions options = new FirebaseOptions.Builder()
+                .setApiKey("AIzaSyAWhpWnFmjGfkBEfLe2PfuypOYyGcH84LA")
+                .setApplicationId("1:788347610980:android:cfea43ffde6fb4e25cfc71")
+                .setDatabaseUrl("https://webdocdoctorsdk.firebaseio.com")
+                .build();
+
+        FirebaseApp secondApp = FirebaseApp.initializeApp(context, options, "second app");
+        final FirebaseDatabase secondDatabase = FirebaseDatabase.getInstance(secondApp);
+
+        final FirebaseAuth mAuth = com.google.firebase.auth.FirebaseAuth.getInstance(secondApp);
+
+        //final FirebaseAuth mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
         final RegisterUserForChatInterface registerUserForChatInterface = (RegisterUserForChatInterface) context;
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            DatabaseReference firebaseDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child(appName).child(email.replace(".", ""));
+                            //DatabaseReference firebaseDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child(appName).child(email.replace(".", ""));
+                            DatabaseReference firebaseDatabaseReference = secondDatabase.getReference("Users").child(appName).child(email.replace(".", ""));
                             HashMap<String, String> hashMap = new HashMap<String, String>();
                             hashMap.put("name", name);
                             hashMap.put("email", email);
@@ -445,7 +460,7 @@ public class WebDocChat {
 
     public static void getChatUsersList(Context context, final String email, String appName) {
         final WebdocChatUsersInterface vetDocChatUsersInterface = (WebdocChatUsersInterface) context;
-        /*if (!(appName.equalsIgnoreCase(String.valueOf(R.string.app_name))) || !(appName.equalsIgnoreCase(String.valueOf("WebDocDoctor")))) {
+        if (!(appName.equalsIgnoreCase(String.valueOf(R.string.app_name)))) {
             DatabaseReference chatUsersReference = FirebaseDatabase.getInstance().getReference().child("Users").child(String.valueOf(R.string.app_name));
             chatUsersReference.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -473,7 +488,7 @@ public class WebDocChat {
 
                 }
             });
-        } else */{
+        } else {
             final DatabaseReference dbReference = FirebaseDatabase.getInstance().getReference();
             dbReference.child("Chat").child(email.replace(".", "")).addValueEventListener(new ValueEventListener() {
                 @Override
