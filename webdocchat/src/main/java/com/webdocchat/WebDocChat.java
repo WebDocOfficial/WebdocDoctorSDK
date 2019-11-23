@@ -457,8 +457,9 @@ public class WebDocChat {
 
                         user.setFirebaseID(snapshot.getKey());
                         // Toast.makeText(UserDashboardActivity.this, snapshot.getKey(), Toast.LENGTH_SHORT).show();
-                        user.setUserName(snapshot.child("name").getValue().toString());
-                        user.setUserID(snapshot.child("email").getValue().toString());
+                        user.setUserName(snapshot.child("username").getValue().toString());
+                        user.setUserID(snapshot.child("userID").getValue().toString());
+                        user.setFirebaseID(snapshot.child("firebaseID").getValue().toString());
                         user.setStatus(snapshot.child("status").getValue().toString());
                         user.setAppName(String.valueOf(R.string.app_name));
                         Global.ChatUsersList.add(user);
@@ -492,6 +493,7 @@ public class WebDocChat {
                                             tempUser.setUserName(dataSnapshot.child("username").getValue().toString());
                                             tempUser.setAppName(snapshot.getKey());
                                             tempUser.setFirebaseID(snapshot1.getKey());
+                                            tempUser.setUserID(dataSnapshot.child("userID").getValue().toString());
                                             Global.ChatUsersList.add(tempUser);
                                        /*Toast.makeText(getActivity(), Global.chatUsersList.toString(), Toast.LENGTH_LONG).show();*/
                                            /* if (ChatUsersListFrag.adapter != null) {
