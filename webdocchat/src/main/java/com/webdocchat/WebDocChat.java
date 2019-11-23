@@ -402,7 +402,7 @@ public class WebDocChat {
 
     public static void registerUserForChat(Context context, final String appName, final String name, final String email, final String password) {
 
-        FirebaseApp appReference = DatabaseReference(context);
+        FirebaseApp appReference = firebaseAppReference(context);
 
         final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
 
@@ -538,7 +538,7 @@ public class WebDocChat {
 
     }
 
-    private static FirebaseApp DatabaseReference(Context context)
+    private static FirebaseApp firebaseAppReference(Context context)
     {
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setApiKey("AIzaSyAWhpWnFmjGfkBEfLe2PfuypOYyGcH84LA")
