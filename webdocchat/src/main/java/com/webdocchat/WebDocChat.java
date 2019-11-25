@@ -412,7 +412,6 @@ public class WebDocChat {
         final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
         final FirebaseAuth mAuth = com.google.firebase.auth.FirebaseAuth.getInstance(appReference);
 
-        //final FirebaseAuth mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
         final RegisterUserForChatInterface registerUserForChatInterface = (RegisterUserForChatInterface) context;
         final FirebaseAuth finalMAuth = mAuth;
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -550,9 +549,14 @@ public class WebDocChat {
                 .setStorageBucket("gs://webdocdoctorsdk.appspot.com/")
                 .build();
 
-        FirebaseApp secondApp = FirebaseApp.initializeApp(context, options);
-
-        return secondApp;
+        try {
+            FirebaseApp app = FirebaseApp.initializeApp(context, options, "WebDocDoctorSDK");
+            return app;
+        }
+        catch (IllegalStateException e)
+        {
+            return FirebaseApp.getInstance("WebDocDoctorSDK");
+        }
     }
 
 }
