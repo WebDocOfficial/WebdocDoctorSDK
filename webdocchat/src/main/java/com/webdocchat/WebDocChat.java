@@ -547,7 +547,7 @@ public class WebDocChat {
         final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
         final FirebaseAuth mAuth = com.google.firebase.auth.FirebaseAuth.getInstance(appReference);
 
-        final WebdocChatInterface listener = (WebdocChatInterface) context;
+        final RegisterUserForChatInterface listener = (RegisterUserForChatInterface) context;
 
         if(mAuth.getCurrentUser() != null)
         {

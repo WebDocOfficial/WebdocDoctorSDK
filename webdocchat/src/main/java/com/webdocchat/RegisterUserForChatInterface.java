@@ -5,5 +5,8 @@ package com.webdocchat;
  */
 
 public interface RegisterUserForChatInterface {
+
     public void RegisterUserResponse(String response);
+
+    public void isUserLoggedInResponse(Boolean response);
 }
