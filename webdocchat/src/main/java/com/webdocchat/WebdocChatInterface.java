@@ -15,4 +15,6 @@ public interface WebdocChatInterface {
     public void onChangeUserStatusResponse(String status, String lastSeen);
 
     public void onMessageSentResponse(String Response);
+
+    public void isUserLoggedInResponse(Boolean response);
 }

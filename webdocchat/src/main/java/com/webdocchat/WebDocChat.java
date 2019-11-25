@@ -541,6 +541,25 @@ public class WebDocChat {
 
     }
 
+    public static void isUserLoggedIn(Context context)
+    {
+        FirebaseApp appReference = firebaseAppReference(context);
+        final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
+        final FirebaseAuth mAuth = com.google.firebase.auth.FirebaseAuth.getInstance(appReference);
+
+        final WebdocChatInterface listener = (WebdocChatInterface) context;
+
+        if(mAuth.getCurrentUser() != null)
+        {
+            listener.isUserLoggedInResponse(true);
+        }
+        else
+        {
+            listener.isUserLoggedInResponse(false);
+        }
+
+    }
+
     private static FirebaseApp firebaseAppReference(Context context)
     {
         FirebaseOptions options = new FirebaseOptions.Builder()
