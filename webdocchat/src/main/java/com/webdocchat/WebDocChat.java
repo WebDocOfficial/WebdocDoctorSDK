@@ -550,7 +550,7 @@ public class WebDocChat {
                 .setStorageBucket("gs://webdocdoctorsdk.appspot.com/")
                 .build();
 
-        FirebaseApp secondApp = FirebaseApp.initializeApp(context, options, "second app");
+        FirebaseApp secondApp = FirebaseApp.initializeApp(context, options);
 
         return secondApp;
     }
