@@ -249,21 +249,7 @@ public class WebDocChat {
 
     public static String changeStatus(Context ctx, String AppName, String UserId, String status)
     {
-        FirebaseApp appReference;
-        final FirebaseDatabase reference;
-
-        if (FirebaseApp.getApps(ctx).isEmpty()) {
-            //FirebaseApp.initializeApp(context);
-            appReference = firebaseAppReference(ctx);
-            reference = FirebaseDatabase.getInstance(appReference);
-        }
-        else
-        {
-            reference = FirebaseDatabase.getInstance();
-        }
-
-
-
+        final FirebaseDatabase reference = FirebaseDatabase.getInstance();
         final WebdocChatInterface listener = (WebdocChatInterface) ctx;
         final String[] response = {""};
 
@@ -420,21 +406,9 @@ public class WebDocChat {
 
     public static void registerUserForChat(Context context, final String appName, final String name, final String email, final String password) {
 
-        FirebaseApp appReference;
-        final FirebaseDatabase reference;
-        FirebaseAuth mAuth = null;
-
-        if (FirebaseApp.getApps(context).isEmpty()) {
-            //FirebaseApp.initializeApp(context);
-            appReference = firebaseAppReference(context);
-            reference = FirebaseDatabase.getInstance(appReference);
-            mAuth = com.google.firebase.auth.FirebaseAuth.getInstance(appReference);
-        }
-        else
-        {
-            reference = FirebaseDatabase.getInstance();
-            mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
-        }
+        FirebaseApp appReference = firebaseAppReference(context);
+        final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
+        final FirebaseAuth mAuth = com.google.firebase.auth.FirebaseAuth.getInstance(appReference);
 
         //final FirebaseAuth mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
         final RegisterUserForChatInterface registerUserForChatInterface = (RegisterUserForChatInterface) context;
