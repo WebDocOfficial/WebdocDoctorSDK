@@ -247,10 +247,16 @@ public class WebDocChat {
         });
     }
 
-    public static String changeStatus(Context ctx, String AppName, String UserId, String status) {
+    public static String changeStatus(Context ctx, String AppName, String UserId, String status)
+    {
+        FirebaseApp appReference = firebaseAppReference(ctx);
+        final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
+
         final WebdocChatInterface listener = (WebdocChatInterface) ctx;
         final String[] response = {""};
-        DatabaseReference dbReference = FirebaseDatabase.getInstance().getReference().child("Users").child(AppName).child(UserId);
+
+        DatabaseReference dbReference = reference.getReference().child("Users").child(AppName).child(UserId);
+
         HashMap<String, Object> param = new HashMap<>();
         param.put("status", status);
         param.put("timestamp", ServerValue.TIMESTAMP);
