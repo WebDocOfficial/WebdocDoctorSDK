@@ -541,7 +541,7 @@ public class WebDocChat {
 
     }
 
-    /*public static void isUserLoggedIn(Context context)
+    public static void isUserLoggedIn(Context context)
     {
         FirebaseApp appReference = firebaseAppReference(context);
         final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
@@ -558,7 +558,7 @@ public class WebDocChat {
             listener.isUserLoggedInResponse(false);
         }
 
-    }*/
+    }
 
     private static FirebaseApp firebaseAppReference(Context context)
     {
