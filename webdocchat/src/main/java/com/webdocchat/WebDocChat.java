@@ -249,8 +249,20 @@ public class WebDocChat {
 
     public static String changeStatus(Context ctx, String AppName, String UserId, String status)
     {
-        FirebaseApp appReference = firebaseAppReference(ctx);
-        final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
+        FirebaseApp appReference;
+        final FirebaseDatabase reference;
+
+        if (FirebaseApp.getApps(ctx).isEmpty()) {
+            //FirebaseApp.initializeApp(context);
+            appReference = firebaseAppReference(ctx);
+            reference = FirebaseDatabase.getInstance(appReference);
+        }
+        else
+        {
+            reference = FirebaseDatabase.getInstance();
+        }
+
+
 
         final WebdocChatInterface listener = (WebdocChatInterface) ctx;
         final String[] response = {""};
@@ -408,14 +420,25 @@ public class WebDocChat {
 
     public static void registerUserForChat(Context context, final String appName, final String name, final String email, final String password) {
 
-        FirebaseApp appReference = firebaseAppReference(context);
+        FirebaseApp appReference;
+        final FirebaseDatabase reference;
+        FirebaseAuth mAuth = null;
 
-        final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
-
-        final FirebaseAuth mAuth = com.google.firebase.auth.FirebaseAuth.getInstance(appReference);
+        if (FirebaseApp.getApps(context).isEmpty()) {
+            //FirebaseApp.initializeApp(context);
+            appReference = firebaseAppReference(context);
+            reference = FirebaseDatabase.getInstance(appReference);
+            mAuth = com.google.firebase.auth.FirebaseAuth.getInstance(appReference);
+        }
+        else
+        {
+            reference = FirebaseDatabase.getInstance();
+            mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
+        }
 
         //final FirebaseAuth mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
         final RegisterUserForChatInterface registerUserForChatInterface = (RegisterUserForChatInterface) context;
+        final FirebaseAuth finalMAuth = mAuth;
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -441,7 +464,7 @@ public class WebDocChat {
                                         }
                                     });
                         } else if (task.getException() instanceof FirebaseAuthUserCollisionException) {
-                            mAuth.signInWithEmailAndPassword(email, password)
+                            finalMAuth.signInWithEmailAndPassword(email, password)
                                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                         @Override
                                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -548,6 +571,7 @@ public class WebDocChat {
                 .setApiKey("AIzaSyAWhpWnFmjGfkBEfLe2PfuypOYyGcH84LA")
                 .setApplicationId("1:788347610980:android:cfea43ffde6fb4e25cfc71")
                 .setDatabaseUrl("https://webdocdoctorsdk.firebaseio.com")
+                .setStorageBucket("gs://webdocdoctorsdk.appspot.com/")
                 .build();
 
         FirebaseApp secondApp = FirebaseApp.initializeApp(context, options, "second app");
