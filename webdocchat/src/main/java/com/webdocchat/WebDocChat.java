@@ -249,7 +249,9 @@ public class WebDocChat {
 
     public static String changeStatus(Context ctx, String AppName, String UserId, String status)
     {
-        final FirebaseDatabase reference = FirebaseDatabase.getInstance();
+        FirebaseApp appReference = firebaseAppReference(ctx);
+        final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
+
         final WebdocChatInterface listener = (WebdocChatInterface) ctx;
         final String[] response = {""};
 
