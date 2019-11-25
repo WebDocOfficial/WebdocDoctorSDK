@@ -421,10 +421,11 @@ public class WebDocChat {
                         if (task.isSuccessful()) {
                             //DatabaseReference firebaseDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child(appName).child(email.replace(".", ""));
                             DatabaseReference firebaseDatabaseReference = reference.getReference("Users").child(appName).child(email.replace(".", ""));
-                            HashMap<String, String> hashMap = new HashMap<String, String>();
+                            HashMap<String, Object> hashMap = new HashMap();
                             hashMap.put("name", name);
                             hashMap.put("email", email);
                             hashMap.put("status", "online");
+                            hashMap.put("timestamp", ServerValue.TIMESTAMP);
 
                             firebaseDatabaseReference.setValue(hashMap)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
