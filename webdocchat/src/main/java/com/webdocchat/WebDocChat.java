@@ -560,6 +560,14 @@ public class WebDocChat {
 
     }
 
+    public static void userLogout(Context context)
+    {
+        FirebaseApp appReference = firebaseAppReference(context);
+        final FirebaseAuth mAuth = com.google.firebase.auth.FirebaseAuth.getInstance(appReference);
+
+        mAuth.signOut();
+    }
+
     private static FirebaseApp firebaseAppReference(Context context)
     {
         FirebaseOptions options = new FirebaseOptions.Builder()
