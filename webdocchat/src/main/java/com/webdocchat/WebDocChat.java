@@ -445,7 +445,7 @@ public class WebDocChat {
                                         @Override
                                         public void onComplete(@NonNull Task<AuthResult> task) {
                                             if (task.isSuccessful()) {
-                                                registerUserForChatInterface.RegisterUserResponse("successfully login");
+                                                registerUserForChatInterface.RegisterUserResponse("success");
                                             } else {
                                                 registerUserForChatInterface.RegisterUserResponse(task.getException().getMessage());
                                             }
