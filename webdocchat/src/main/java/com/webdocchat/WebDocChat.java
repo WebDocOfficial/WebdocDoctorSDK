@@ -460,7 +460,7 @@ public class WebDocChat {
 
     public static void getChatUsersList(Context context, final String email, String appName) {
         final WebdocChatUsersInterface vetDocChatUsersInterface = (WebdocChatUsersInterface) context;
-        if (!(appName.equalsIgnoreCase(String.valueOf(R.string.app_name)))) {
+        if (!(appName.equalsIgnoreCase(String.valueOf(R.string.app_name))) || !(appName.equalsIgnoreCase(String.valueOf("WebDocDoctor")))) {
             DatabaseReference chatUsersReference = FirebaseDatabase.getInstance().getReference().child("Users").child(String.valueOf(R.string.app_name));
             chatUsersReference.addValueEventListener(new ValueEventListener() {
                 @Override
