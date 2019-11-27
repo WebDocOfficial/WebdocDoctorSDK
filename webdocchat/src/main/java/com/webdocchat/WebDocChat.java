@@ -282,8 +282,9 @@ public class WebDocChat {
         final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
 
         final WebdocChatInterface listener = (WebdocChatInterface) ctx;
-        DatabaseReference dbReference = reference.getReference();
-        dbReference.child("Users").child(AppName).child(UserId).addValueEventListener(new ValueEventListener() {
+
+        DatabaseReference dbReference = reference.getReference("Users").child(AppName).child(UserId);
+        dbReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String status = (String) dataSnapshot.child("status").getValue();
@@ -293,7 +294,7 @@ public class WebDocChat {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                listener.onChangeUserStatusResponse(databaseError.getMessage().toString(), "null");
+                //listener.onChangeUserStatusResponse(databaseError.getMessage().toString(), "null");
             }
         });
     }
