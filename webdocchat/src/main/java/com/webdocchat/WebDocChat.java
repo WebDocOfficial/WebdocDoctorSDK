@@ -277,8 +277,12 @@ public class WebDocChat {
     }
 
     public static void checkStatus(Context ctx, String AppName, String UserId) {
+
+        FirebaseApp appReference = firebaseAppReference(ctx);
+        final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
+
         final WebdocChatInterface listener = (WebdocChatInterface) ctx;
-        DatabaseReference dbReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference dbReference = reference.getReference();
         dbReference.child("Users").child(AppName).child(UserId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -494,7 +498,7 @@ public class WebDocChat {
             });
         } else {
             final DatabaseReference dbReference = reference.getReference();
-            
+
             dbReference.child("Chat").child(email.replace(".", "")).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
