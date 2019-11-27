@@ -286,10 +286,11 @@ public class WebDocChat {
         DatabaseReference dbReference = reference.getReference("Users").child(AppName).child(UserId);
         dbReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
                 String status = (String) dataSnapshot.child("status").getValue();
-                long lastSeen = (long) dataSnapshot.child("timestamp").getValue();
-                listener.onChangeUserStatusResponse(status, String.valueOf(lastSeen));
+                //long lastSeen = (long) dataSnapshot.child("timestamp").getValue();
+                listener.onChangeUserStatusResponse(status, "1234");
             }
 
             @Override
