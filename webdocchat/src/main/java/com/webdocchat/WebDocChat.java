@@ -459,9 +459,15 @@ public class WebDocChat {
     }
 
     public static void getChatUsersList(Context context, final String email, String appName) {
+
+        FirebaseApp appReference = firebaseAppReference(context);
+        final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
+
         final WebdocChatUsersInterface vetDocChatUsersInterface = (WebdocChatUsersInterface) context;
-        if ((appName.equalsIgnoreCase(String.valueOf(R.string.app_name)))) {
-            DatabaseReference chatUsersReference = FirebaseDatabase.getInstance().getReference().child("Users").child(String.valueOf(R.string.app_name));
+
+        if ((appName.equalsIgnoreCase(String.valueOf(R.string.app_name))))
+        {
+            DatabaseReference chatUsersReference = reference.getReference().child("Users").child(String.valueOf(R.string.app_name));
             chatUsersReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -487,7 +493,8 @@ public class WebDocChat {
                 }
             });
         } else {
-            final DatabaseReference dbReference = FirebaseDatabase.getInstance().getReference();
+            final DatabaseReference dbReference = reference.getReference();
+            
             dbReference.child("Chat").child(email.replace(".", "")).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
