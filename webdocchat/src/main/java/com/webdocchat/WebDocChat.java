@@ -32,6 +32,7 @@ import com.webdocchat.NotificationManager.Data;
 import com.webdocchat.NotificationManager.MyResponse;
 import com.webdocchat.NotificationManager.Sender;
 import com.webdocchat.NotificationManager.Token;
+import com.webdocchat.TimeAgo.TimeAgo;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -276,20 +277,20 @@ public class WebDocChat {
         return response[0];
     }
 
-    public static void checkStatus(Context ctx, String AppName, String UserId) {
+    public static void checkStatus(final Context ctx, String AppName, String UserId) {
 
         FirebaseApp appReference = firebaseAppReference(ctx);
         final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
 
         final WebdocChatInterface listener = (WebdocChatInterface) ctx;
-        
+
         DatabaseReference dbReference = reference.getReference("Users").child(AppName).child(UserId);
         dbReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String status = (String) dataSnapshot.child("status").getValue();
                 long lastSeen = (long) dataSnapshot.child("timestamp").getValue();
-                listener.onChangeUserStatusResponse(status, String.valueOf(lastSeen));
+                listener.onChangeUserStatusResponse(status, TimeAgo.getTimeAgo(lastSeen, ctx));
             }
 
             @Override
