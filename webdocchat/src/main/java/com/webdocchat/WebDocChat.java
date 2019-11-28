@@ -282,20 +282,19 @@ public class WebDocChat {
         final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
 
         final WebdocChatInterface listener = (WebdocChatInterface) ctx;
-
+        
         DatabaseReference dbReference = reference.getReference("Users").child(AppName).child(UserId);
         dbReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-            {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String status = (String) dataSnapshot.child("status").getValue();
-                //long lastSeen = (long) dataSnapshot.child("timestamp").getValue();
-                listener.onChangeUserStatusResponse(status, "1234");
+                long lastSeen = (long) dataSnapshot.child("timestamp").getValue();
+                listener.onChangeUserStatusResponse(status, String.valueOf(lastSeen));
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                //listener.onChangeUserStatusResponse(databaseError.getMessage().toString(), "null");
+                listener.onChangeUserStatusResponse(databaseError.getMessage().toString(), "null");
             }
         });
     }
