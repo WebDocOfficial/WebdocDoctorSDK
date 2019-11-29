@@ -301,6 +301,7 @@ public class WebDocChat {
     }
 
     private static void seenStatus(String AppName, final String personalEmail, final String chatUserEmail, String UsersChatKey) {
+        
         DatabaseReference changeMsgSeenStatusReference = FirebaseDatabase.getInstance().getReference();
         changeMsgSeenStatusReference.child("Messages").child(AppName).child(UsersChatKey).addValueEventListener(new ValueEventListener() {
             @Override
