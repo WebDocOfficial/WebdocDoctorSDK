@@ -408,7 +408,8 @@ public class WebDocChat {
         chatReference.child("Messages").child(senderAppName).child(UsersChatKey).child(messageID).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
+                if (task.isSuccessful())
+                {
                     response[0] = "success";
                     if (notify[0]) {
                         sendNotification(senderAppName, receiverAppName, sender, receiver, msg);
