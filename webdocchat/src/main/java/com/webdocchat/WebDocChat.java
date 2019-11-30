@@ -150,7 +150,7 @@ public class WebDocChat {
         });
     }*/
 
-    public static void uploadFile(final String senderAppName, final String receiverAppName, Uri fileUri, final String sender, final String receiver, final String type) {
+    public static void uploadFile(final FirebaseDatabase reference, final String senderAppName, final String receiverAppName, Uri fileUri, final String sender, final String receiver, final String type) {
 
         final Uri[] downloadUri = new Uri[1];
         StorageReference filePath = null;
@@ -194,7 +194,7 @@ public class WebDocChat {
                 public void onComplete(@NonNull Task<Uri> task) {
                     if (task.isSuccessful()) {
                         downloadUri[0] = task.getResult();
-                        messageSend(senderAppName, receiverAppName, downloadUri[0].toString(), sender, receiver, type);
+                        messageSend(reference, senderAppName, receiverAppName, downloadUri[0].toString(), sender, receiver, type);
                     } else {
                         // Handle failures
                         //Toast.makeText(MessagesActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -205,12 +205,20 @@ public class WebDocChat {
         }
     }
 
-    public static void sendMessage(final String senderAppName, final String receiverAppName, Uri fileUri, final String sender, final String receiver, String msgType) {
-        uploadFile(senderAppName, receiverAppName, fileUri, sender, receiver, msgType);
+    public static void sendMessage(Context context, final String senderAppName, final String receiverAppName, Uri fileUri, final String sender, final String receiver, String msgType)
+    {
+        FirebaseApp appReference = firebaseAppReference(context);
+        final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
+
+        uploadFile(reference, senderAppName, receiverAppName, fileUri, sender, receiver, msgType);
     }
 
-    public static void sendMessage(final String senderAppName, final String receiverAppName, final String msg, final String sender, final String receiver, String msgType) {
-        messageSend(senderAppName, receiverAppName, msg, sender, receiver, msgType);
+    public static void sendMessage(Context context, final String senderAppName, final String receiverAppName, final String msg, final String sender, final String receiver, String msgType)
+    {
+        FirebaseApp appReference = firebaseAppReference(context);
+        final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
+
+        messageSend(reference, senderAppName, receiverAppName, msg, sender, receiver, msgType);
     }
 
     public static void getMessage(Context ctx, final String AppName, final String personalEmail, final String chatUserEmail) {
@@ -372,11 +380,8 @@ public class WebDocChat {
         reference.child(AppName).child(Userid).setValue(token1);
     }
 
-    private static String messageSend(Context context, final String senderAppName, final String receiverAppName, final String msg, final String sender, final String receiver, String msgType)
+    private static String messageSend(FirebaseDatabase reference, final String senderAppName, final String receiverAppName, final String msg, final String sender, final String receiver, String msgType)
     {
-        FirebaseApp appReference = firebaseAppReference(context);
-        final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
-
         final boolean[] notify = {false};
         notify[0] = true;
         String UsersChatKey = "";
@@ -408,8 +413,7 @@ public class WebDocChat {
         chatReference.child("Messages").child(senderAppName).child(UsersChatKey).child(messageID).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful())
-                {
+                if (task.isSuccessful()) {
                     response[0] = "success";
                     if (notify[0]) {
                         sendNotification(senderAppName, receiverAppName, sender, receiver, msg);
