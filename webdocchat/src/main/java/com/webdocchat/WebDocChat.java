@@ -301,7 +301,7 @@ public class WebDocChat {
     }
 
     private static void seenStatus(String AppName, final String personalEmail, final String chatUserEmail, String UsersChatKey) {
-        
+
         DatabaseReference changeMsgSeenStatusReference = FirebaseDatabase.getInstance().getReference();
         changeMsgSeenStatusReference.child("Messages").child(AppName).child(UsersChatKey).addValueEventListener(new ValueEventListener() {
             @Override
@@ -387,14 +387,20 @@ public class WebDocChat {
         hashMap.put("messageID", messageID);
         hashMap.put("type", msgType);
         hashMap.put("MessageStatus", "sent");
-        HashMap<String, Object> chat_hashMap = new HashMap<String, Object>();
-        chat_hashMap.put("chat", "true");
-        chatReference.child("Chat").child(receiver).child(senderAppName).child(sender).updateChildren(chat_hashMap);
+
+        if(senderAppName.equalsIgnoreCase("WebDocDoctor"))
+        {
+            HashMap<String, Object> chat_hashMap = new HashMap<String, Object>();
+            chat_hashMap.put("chat", "true");
+            chatReference.child("Chat").child(receiver).child(senderAppName).child(sender).updateChildren(chat_hashMap);
+        }
+
         ArrayList TwoChattingUsersID = new ArrayList<>();
         TwoChattingUsersID.add(sender);
         TwoChattingUsersID.add(receiver);
         Collections.sort(TwoChattingUsersID);
         UsersChatKey = TwoChattingUsersID.get(0) + "_" + TwoChattingUsersID.get(1);
+
         chatReference.child("Messages").child(senderAppName).child(UsersChatKey).child(messageID).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
