@@ -372,12 +372,16 @@ public class WebDocChat {
         reference.child(AppName).child(Userid).setValue(token1);
     }
 
-    private static String messageSend(final String senderAppName, final String receiverAppName, final String msg, final String sender, final String receiver, String msgType) {
+    private static String messageSend(Context context, final String senderAppName, final String receiverAppName, final String msg, final String sender, final String receiver, String msgType)
+    {
+        FirebaseApp appReference = firebaseAppReference(context);
+        final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
+
         final boolean[] notify = {false};
         notify[0] = true;
         String UsersChatKey = "";
         final String[] response = {""};
-        DatabaseReference chatReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference chatReference = reference.getReference();
         String messageID = chatReference.push().getKey();
         HashMap<String, Object> hashMap = new HashMap<String, Object>();
         hashMap.put("message", msg);
