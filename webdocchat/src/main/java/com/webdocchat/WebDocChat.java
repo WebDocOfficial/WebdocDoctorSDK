@@ -223,8 +223,12 @@ public class WebDocChat {
     }
 
     public static void getMessage(Context ctx, final String AppName, final String personalEmail, final String chatUserEmail) {
+
+        FirebaseApp appReference = firebaseAppReference(ctx);
+        final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
+
         final List<MessageDataModel> msgData = new ArrayList();
-        DatabaseReference chatReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference chatReference = reference.getReference();
         final WebdocChatInterface listener = (WebdocChatInterface) ctx;
         String chatKey = "";
         ArrayList TwoChattingUsersID = new ArrayList<>();
