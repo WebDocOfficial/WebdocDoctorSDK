@@ -495,6 +495,7 @@ public class WebDocChat {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                     Global.ChatUsersList.clear();
+                    
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         ChatUserModel user = new ChatUserModel();
 
@@ -524,6 +525,8 @@ public class WebDocChat {
                         dbReference.child("Chat").child(email.replace(".", "")).child(snapshot.getKey()).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
+
+                                Global.ChatUsersList.clear();
 
                                 for (final DataSnapshot snapshot1 : dataSnapshot1.getChildren()) {
                                     dbReference.child("Users").child(snapshot.getKey()).child(snapshot1.getKey()).addValueEventListener(new ValueEventListener() {
