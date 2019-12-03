@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -480,7 +481,7 @@ public class WebDocChat {
                 });
     }
 
-    public static void getChatUsersList(Context context, final String email, String appName) {
+    public static void getChatUsersList(final Context context, final String email, String appName) {
 
         FirebaseApp appReference = firebaseAppReference(context);
         final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
@@ -495,7 +496,7 @@ public class WebDocChat {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                     Global.ChatUsersList.clear();
-                    
+
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         ChatUserModel user = new ChatUserModel();
 
@@ -539,6 +540,9 @@ public class WebDocChat {
                                             tempUser.setAppName(snapshot.getKey());
                                             tempUser.setFirebaseEmail(snapshot1.getKey());
                                             tempUser.setEmail(dataSnapshot.child("email").getValue().toString());
+
+                                            Toast.makeText(context, tempUser.getName(), Toast.LENGTH_SHORT).show();
+
                                             Global.ChatUsersList.add(tempUser);
                                        /*Toast.makeText(getActivity(), Global.chatUsersList.toString(), Toast.LENGTH_LONG).show();*/
                                            /* if (ChatUsersListFrag.adapter != null) {
