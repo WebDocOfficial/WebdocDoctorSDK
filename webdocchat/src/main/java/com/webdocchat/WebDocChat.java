@@ -151,7 +151,7 @@ public class WebDocChat {
         });
     }*/
 
-    public static void uploadFile(final FirebaseDatabase reference, final String senderAppName, final String receiverAppName, Uri fileUri, final String sender, final String receiver, final String type) {
+    public static void uploadFile(final FirebaseDatabase databaseReference, FirebaseStorage storageReference, final String senderAppName, final String receiverAppName, Uri fileUri, final String sender, final String receiver, final String type) {
 
         final Uri[] downloadUri = new Uri[1];
         StorageReference filePath = null;
@@ -160,22 +160,22 @@ public class WebDocChat {
         if (fileUri != null) {
             //progressDialog.show();
 
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Messages");
+            DatabaseReference ref = databaseReference.getReference().child("Messages");
             String messageID = ref.push().getKey();
 
             //String name = Environment.getExternalStorageDirectory().getAbsolutePath();
 
             switch (type) {
                 case "image":
-                    filePath = FirebaseStorage.getInstance().getReference().child("Images/").child(messageID + ".jpg");
+                    filePath = storageReference.getReference().child("Images/").child(messageID + ".jpg");
                     break;
 
                 case "pdf":
-                    filePath = FirebaseStorage.getInstance().getReference().child("PDF Files/").child(messageID + "." + type);
+                    filePath = storageReference.getReference().child("PDF Files/").child(messageID + "." + type);
                     break;
 
                 case "docx":
-                    filePath = FirebaseStorage.getInstance().getReference().child("Docx Files/").child(messageID + "." + type);
+                    filePath = storageReference.getReference().child("Docx Files/").child(messageID + "." + type);
                     break;
             }
             uploadTask = filePath.putFile(fileUri);
@@ -195,7 +195,7 @@ public class WebDocChat {
                 public void onComplete(@NonNull Task<Uri> task) {
                     if (task.isSuccessful()) {
                         downloadUri[0] = task.getResult();
-                        messageSend(reference, senderAppName, receiverAppName, downloadUri[0].toString(), sender, receiver, type);
+                        messageSend(databaseReference, senderAppName, receiverAppName, downloadUri[0].toString(), sender, receiver, type);
                     } else {
                         // Handle failures
                         //Toast.makeText(MessagesActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -209,20 +209,21 @@ public class WebDocChat {
     public static void sendMessage(Context context, final String senderAppName, final String receiverAppName, Uri fileUri, final String sender, final String receiver, String msgType)
     {
         FirebaseApp appReference = firebaseAppReference(context);
-        final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
+        FirebaseDatabase databaseReference = FirebaseDatabase.getInstance(appReference);
+        FirebaseStorage storageReference = FirebaseStorage.getInstance(appReference);
 
-        uploadFile(reference, senderAppName, receiverAppName, fileUri, sender, receiver, msgType);
+        uploadFile(databaseReference, storageReference, senderAppName, receiverAppName, fileUri, sender, receiver, msgType);
     }
 
     public static void sendMessage(Context context, final String senderAppName, final String receiverAppName, final String msg, final String sender, final String receiver, String msgType)
     {
         FirebaseApp appReference = firebaseAppReference(context);
-        final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
+        FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
 
         messageSend(reference, senderAppName, receiverAppName, msg, sender, receiver, msgType);
     }
 
-    public static void getMessage(Context ctx, final String AppName, final String personalEmail, final String chatUserEmail) {
+    public static void getMessage(final Context ctx, final String AppName, final String personalEmail, final String chatUserEmail) {
 
         FirebaseApp appReference = firebaseAppReference(ctx);
         final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
@@ -544,8 +545,6 @@ public class WebDocChat {
                                             tempUser.setAppName(snapshot.getKey());
                                             tempUser.setFirebaseEmail(snapshot1.getKey());
                                             tempUser.setEmail(dataSnapshot.child("email").getValue().toString());
-
-                                            Toast.makeText(context, tempUser.getName(), Toast.LENGTH_SHORT).show();
 
                                             Global.ChatUsersList.add(tempUser);
                                        /*Toast.makeText(getActivity(), Global.chatUsersList.toString(), Toast.LENGTH_LONG).show();*/
