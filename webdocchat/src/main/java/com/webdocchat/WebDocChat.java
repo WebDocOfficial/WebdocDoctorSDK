@@ -151,7 +151,7 @@ public class WebDocChat {
         });
     }*/
 
-    public static void uploadFile(final FirebaseDatabase databaseReference, FirebaseStorage storageReference, final String senderAppName, final String receiverAppName, Uri fileUri, final String sender, final String receiver, final String type) {
+    private static void uploadFile(final FirebaseDatabase databaseReference, FirebaseStorage storageReference, final String senderAppName, final String receiverAppName, Uri fileUri, final String sender, final String receiver, final String type) {
 
         final Uri[] downloadUri = new Uri[1];
         StorageReference filePath = null;
@@ -613,7 +613,7 @@ public class WebDocChat {
                 .setApiKey("AIzaSyAWhpWnFmjGfkBEfLe2PfuypOYyGcH84LA")
                 .setApplicationId("1:788347610980:android:cfea43ffde6fb4e25cfc71")
                 .setDatabaseUrl("https://webdocdoctorsdk.firebaseio.com")
-                .setStorageBucket("gs://webdocdoctorsdk.appspot.com/")
+                .setStorageBucket("webdocdoctorsdk.appspot.com")
                 .build();
 
         try {
