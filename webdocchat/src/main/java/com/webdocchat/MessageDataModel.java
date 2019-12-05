@@ -10,8 +10,7 @@ public class MessageDataModel {
     private String receiver;
     private String Message;
     private String MessageStatus;
-    private String date;
-    private String time;
+    private String timestamp;
     private String type;
 
 
@@ -47,21 +46,9 @@ public class MessageDataModel {
         MessageStatus = messageStatus;
     }
 
-    public String getDate() {
-        return date;
-    }
+    public String getTimestamp() { return timestamp; }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
+    public void setTimestamp(String timestamp) { this.timestamp = timestamp; }
 
     public String getType() {
         return type;
