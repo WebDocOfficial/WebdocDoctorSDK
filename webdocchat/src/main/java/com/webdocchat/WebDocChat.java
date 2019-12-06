@@ -272,7 +272,7 @@ public class WebDocChat {
         final WebdocChatInterface listener = (WebdocChatInterface) ctx;
         final String[] response = {""};
 
-        DatabaseReference dbReference = reference.getReference().child("Users").child(AppName).child(UserId);
+        DatabaseReference dbReference = reference.getReference().child("Users").child(AppName).child(UserId.replace(".",""));
 
         HashMap<String, Object> param = new HashMap<>();
         param.put("status", status);
