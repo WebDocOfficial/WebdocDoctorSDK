@@ -220,7 +220,7 @@ public class WebDocChat {
         FirebaseApp appReference = firebaseAppReference(context);
         FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
 
-        updateToken(reference, "WebDocDoctor", receiver);
+        updateToken(reference, receiverAppName, receiver);
 
         messageSend(reference, senderAppName, receiverAppName, msg, sender, receiver, msgType);
     }
