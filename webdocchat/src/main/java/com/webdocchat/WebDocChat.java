@@ -385,7 +385,7 @@ public class WebDocChat {
     private static void updateToken(FirebaseDatabase dbreference, String AppName, String Userid) {
         DatabaseReference reference = dbreference.getReference("Tokens");
         Token token1 = new Token(FirebaseInstanceId.getInstance().getToken());
-        reference.child(AppName).child(Userid).setValue(token1);
+        reference.child(Userid).setValue(token1);
     }
 
     private static String messageSend(final FirebaseDatabase reference, final String senderAppName, final String receiverAppName, final String msg, final String sender, final String receiver, String msgType)
