@@ -220,6 +220,8 @@ public class WebDocChat {
         FirebaseApp appReference = firebaseAppReference(context);
         FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
 
+        updateToken(reference, receiverAppName, receiver);
+
         messageSend(reference, senderAppName, receiverAppName, msg, sender, receiver, msgType);
     }
 
@@ -342,8 +344,8 @@ public class WebDocChat {
         });
     }
 
-    private static void sendNotification(final String senderAppName, final String receiverAppName, final String sender, final String receiver, final String msg) {
-        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens").child(receiverAppName);
+    private static void sendNotification(FirebaseDatabase reference, final String senderAppName, final String receiverAppName, final String sender, final String receiver, final String msg) {
+        DatabaseReference tokens = reference.getReference("Tokens").child(receiverAppName);
         Query query = tokens.orderByKey().equalTo(receiver);
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -380,13 +382,13 @@ public class WebDocChat {
         });
     }
 
-    public static void updateToken(String AppName, String Userid) {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
+    private static void updateToken(FirebaseDatabase dbreference, String AppName, String Userid) {
+        DatabaseReference reference = dbreference.getReference("Tokens");
         Token token1 = new Token(FirebaseInstanceId.getInstance().getToken());
         reference.child(AppName).child(Userid).setValue(token1);
     }
 
-    private static String messageSend(FirebaseDatabase reference, final String senderAppName, final String receiverAppName, final String msg, final String sender, final String receiver, String msgType)
+    private static String messageSend(final FirebaseDatabase reference, final String senderAppName, final String receiverAppName, final String msg, final String sender, final String receiver, String msgType)
     {
         final boolean[] notify = {false};
         notify[0] = true;
@@ -422,7 +424,7 @@ public class WebDocChat {
                 if (task.isSuccessful()) {
                     response[0] = "success";
                     if (notify[0]) {
-                        sendNotification(senderAppName, receiverAppName, sender, receiver, msg);
+                        sendNotification(reference, senderAppName, receiverAppName, sender, receiver, msg);
                     }
                     notify[0] = false;
                 } else {
