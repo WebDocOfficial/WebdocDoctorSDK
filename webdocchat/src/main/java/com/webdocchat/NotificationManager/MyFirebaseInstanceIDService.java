@@ -27,9 +27,9 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
         String refreshToken = FirebaseInstanceId.getInstance().getToken();
 
-        if (firebaseUser != null) {
+        /*if (firebaseUser != null) {
             updateToken(refreshToken);
-        }
+        }*/
     }
 
     private void updateToken(String refreshToken) {
