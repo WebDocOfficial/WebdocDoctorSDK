@@ -429,14 +429,7 @@ public class WebDocChat {
                 if (task.isSuccessful()) {
                     response[0] = "success";
                     if (notify[0]) {
-
-                        if(receiverAppName.equalsIgnoreCase("PTCLHealth"))
-                        {
-                            sendNotification(reference, "WebDocDoctor", receiverAppName, sender, receiver, msg);
-                        }
-                        else {
-                            sendNotification(reference, senderAppName, receiverAppName, sender, receiver, msg);
-                        }
+                        sendNotification(reference, senderAppName, receiverAppName, sender, receiver, msg);
                     }
                     notify[0] = false;
                 } else {
