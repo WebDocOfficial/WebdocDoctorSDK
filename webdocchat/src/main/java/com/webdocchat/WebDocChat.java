@@ -383,7 +383,7 @@ public class WebDocChat {
         });
     }
 
-    private static void updateToken(Context context, String AppName, String Userid) {
+    public static void updateToken(Context context, String AppName, String Userid) {
 
         FirebaseApp appReference = firebaseAppReference(context);
         final FirebaseDatabase dbreference = FirebaseDatabase.getInstance(appReference);
