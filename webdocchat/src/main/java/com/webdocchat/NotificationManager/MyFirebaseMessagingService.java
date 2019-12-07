@@ -7,6 +7,8 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.widget.Toast;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.webdocchat.R;
@@ -20,6 +22,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+
+        Toast.makeText(this, remoteMessage.getData().get("body").toString(), Toast.LENGTH_SHORT).show();
+        
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             sendOreoNotification(remoteMessage);
         } else {
