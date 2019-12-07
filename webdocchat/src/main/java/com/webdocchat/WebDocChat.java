@@ -220,14 +220,6 @@ public class WebDocChat {
         FirebaseApp appReference = firebaseAppReference(context);
         FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
 
-        if(receiverAppName.equalsIgnoreCase("WebDocDoctor")) {
-            updateToken(context, reference, senderAppName, sender);
-        }
-        else if(receiverAppName.equalsIgnoreCase("PTCLHealth"))
-        {
-            updateToken(context, reference, "WebDocDoctor", sender);
-        }
-
         messageSend(reference, senderAppName, receiverAppName, msg, sender, receiver, msgType);
     }
 
@@ -391,9 +383,10 @@ public class WebDocChat {
         });
     }
 
-    private static void updateToken(Context context, FirebaseDatabase dbreference, String AppName, String Userid) {
+    private static void updateToken(Context context, String AppName, String Userid) {
 
         FirebaseApp appReference = firebaseAppReference(context);
+        final FirebaseDatabase dbreference = FirebaseDatabase.getInstance(appReference);
 
         DatabaseReference reference = dbreference.getReference("Tokens");
         Token token1 = new Token(FirebaseInstanceId.getInstance(appReference).getToken());
