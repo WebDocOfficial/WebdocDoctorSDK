@@ -14,7 +14,7 @@ public interface APIService {
     @Headers(
             {
                     "Content-Type:application/json",
-                    "AAAAt40t52Q:APA91bFgDBSXgDCmbo5EVteyQM68-_5oyXg47wXk-Bp7KyriiBSoqurCCYqLNkWEJcJogaj0vUYiNJmZl2rDebRZ8wmyxhjqJsBpy-bmWG0NXp3gWJswRLEXUxfRnEuHez7vfHe37QCU"
+                    "Authorization:key=AAAAt40t52Q:APA91bFgDBSXgDCmbo5EVteyQM68-_5oyXg47wXk-Bp7KyriiBSoqurCCYqLNkWEJcJogaj0vUYiNJmZl2rDebRZ8wmyxhjqJsBpy-bmWG0NXp3gWJswRLEXUxfRnEuHez7vfHe37QCU"
             }
     )
 
