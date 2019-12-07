@@ -628,6 +628,7 @@ public class WebDocChat {
                 .setApplicationId("1:788347610980:android:cfea43ffde6fb4e25cfc71")
                 .setDatabaseUrl("https://webdocdoctorsdk.firebaseio.com")
                 .setStorageBucket("webdocdoctorsdk.appspot.com")
+                .setGcmSenderId("788347610980")
                 .build();
 
         try {
