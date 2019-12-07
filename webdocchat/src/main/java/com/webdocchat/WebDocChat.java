@@ -410,7 +410,7 @@ public class WebDocChat {
         hashMap.put("type", msgType);
         hashMap.put("MessageStatus", "sent");
 
-        if(senderAppName.equalsIgnoreCase("WebDocDoctor"))
+        if(senderAppName.equalsIgnoreCase("PTCLHealth"))
         {
             HashMap<String, Object> chat_hashMap = new HashMap<String, Object>();
             chat_hashMap.put("chat", "true");
