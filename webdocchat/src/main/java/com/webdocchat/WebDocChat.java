@@ -221,11 +221,11 @@ public class WebDocChat {
         FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
 
         if(receiverAppName.equalsIgnoreCase("WebDocDoctor")) {
-            updateToken(reference, senderAppName, sender);
+            updateToken(context, reference, senderAppName, sender);
         }
         else if(receiverAppName.equalsIgnoreCase("PTCLHealth"))
         {
-            updateToken(reference, "WebDocDoctor", sender);
+            updateToken(context, reference, "WebDocDoctor", sender);
         }
 
         messageSend(reference, senderAppName, receiverAppName, msg, sender, receiver, msgType);
@@ -369,13 +369,16 @@ public class WebDocChat {
                                 public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
                                     if (response.code() == 200) {
                                         if (response.body().success != 1) {
-                                            //Toast.makeText(MessagesActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
+                                            //Toast.makeText(, response, Toast.LENGTH_SHORT).show();
+                                            Log.e("ERROR-------R", response.message());
                                         }
                                     }
                                 }
 
                                 @Override
-                                public void onFailure(Call<MyResponse> call, Throwable throwable) {
+                                public void onFailure(Call<MyResponse> call, Throwable t) {
+
+                                    Log.e("ERROR-------F", t.getMessage());
                                 }
                             });
                 }
@@ -388,9 +391,12 @@ public class WebDocChat {
         });
     }
 
-    private static void updateToken(FirebaseDatabase dbreference, String AppName, String Userid) {
+    private static void updateToken(Context context, FirebaseDatabase dbreference, String AppName, String Userid) {
+
+        FirebaseApp appReference = firebaseAppReference(context);
+
         DatabaseReference reference = dbreference.getReference("Tokens");
-        Token token1 = new Token(FirebaseInstanceId.getInstance().getToken());
+        Token token1 = new Token(FirebaseInstanceId.getInstance(appReference).getToken());
         reference.child(AppName).child(Userid).setValue(token1);
     }
 

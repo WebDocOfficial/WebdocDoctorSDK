@@ -25,7 +25,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
 
-        String refreshToken = FirebaseInstanceId.getInstance().getToken();
+        String refreshToken = FirebaseInstanceId.getInstance(appReference).getToken();
 
         if (firebaseUser != null) {
             updateToken(refreshToken);
@@ -39,7 +39,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
+        DatabaseReference reference = FirebaseDatabase.getInstance(appReference).getReference("Tokens");
 
         Token token = new Token(refreshToken);
 
