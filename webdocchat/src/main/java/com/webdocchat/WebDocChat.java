@@ -423,7 +423,7 @@ public class WebDocChat {
         Collections.sort(TwoChattingUsersID);
         UsersChatKey = TwoChattingUsersID.get(0) + "_" + TwoChattingUsersID.get(1);
 
-        chatReference.child("Messages").child(senderAppName).child(UsersChatKey).child(messageID).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+        chatReference.child("Messages").child("PTCLHealth").child(UsersChatKey).child(messageID).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
