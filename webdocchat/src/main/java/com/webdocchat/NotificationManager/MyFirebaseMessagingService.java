@@ -23,8 +23,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
-        Toast.makeText(this, remoteMessage.getData().get("body").toString(), Toast.LENGTH_SHORT).show();
-        
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             sendOreoNotification(remoteMessage);
         } else {

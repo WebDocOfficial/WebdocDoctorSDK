@@ -342,7 +342,7 @@ public class WebDocChat {
         });
     }
 
-    private static void sendNotification(FirebaseDatabase reference, final String senderAppName, final String receiverAppName, final String sender, final String receiver, final String msg) {
+    private static void sendNotification(FirebaseDatabase reference, final String senderAppName, final String receiverAppName, final String sender, final String receiver, final String msg, final String msgType) {
         DatabaseReference tokens = reference.getReference("Tokens").child(receiverAppName);
         Query query = tokens.orderByKey().equalTo(receiver);
         query.addValueEventListener(new ValueEventListener() {
@@ -350,10 +350,21 @@ public class WebDocChat {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 APIService apiService;
+                Data data;
                 apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren())
+                {
                     Token token = snapshot.getValue(Token.class);
-                    Data data = new Data(sender, sender + ": " + msg, senderAppName, "Sent");
+
+                    if(msgType.equalsIgnoreCase("image"))
+                    {
+                        data = new Data(sender, sender + ": " + "sent you a photo", senderAppName, "Sent");
+                    }
+                    else
+                    {
+                        data = new Data(sender, sender + ": " + msg, senderAppName, "Sent");
+                    }
+
                     Sender sender = new Sender(data, token.getToken());
                     apiService.sendNotification(sender)
                             .enqueue(new Callback<MyResponse>() {
@@ -362,15 +373,12 @@ public class WebDocChat {
                                     if (response.code() == 200) {
                                         if (response.body().success != 1) {
                                             //Toast.makeText(, response, Toast.LENGTH_SHORT).show();
-                                            Log.e("ERROR-------R", response.message());
                                         }
                                     }
                                 }
 
                                 @Override
                                 public void onFailure(Call<MyResponse> call, Throwable t) {
-
-                                    Log.e("ERROR-------F", t.getMessage());
                                 }
                             });
                 }
@@ -393,7 +401,7 @@ public class WebDocChat {
         reference.child(AppName).child(Userid).setValue(token1);
     }
 
-    private static String messageSend(final FirebaseDatabase reference, final String senderAppName, final String receiverAppName, final String msg, final String sender, final String receiver, String msgType)
+    private static String messageSend(final FirebaseDatabase reference, final String senderAppName, final String receiverAppName, final String msg, final String sender, final String receiver, final String msgType)
     {
         final boolean[] notify = {false};
         notify[0] = true;
@@ -429,7 +437,7 @@ public class WebDocChat {
                 if (task.isSuccessful()) {
                     response[0] = "success";
                     if (notify[0]) {
-                        sendNotification(reference, senderAppName, receiverAppName, sender, receiver, msg);
+                        sendNotification(reference, senderAppName, receiverAppName, sender, receiver, msg, msgType);
                     }
                     notify[0] = false;
                 } else {
