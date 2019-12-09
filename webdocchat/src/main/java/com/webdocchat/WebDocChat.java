@@ -151,7 +151,7 @@ public class WebDocChat {
         });
     }*/
 
-    private static void uploadFile(final FirebaseDatabase databaseReference, FirebaseStorage storageReference, final String senderAppName, final String receiverAppName, Uri fileUri, final String sender, final String receiver, final String type) {
+    private static void uploadFile(final Context context, final FirebaseDatabase databaseReference, FirebaseStorage storageReference, final String senderAppName, final String receiverAppName, Uri fileUri, final String sender, final String receiver, final String type) {
 
         final Uri[] downloadUri = new Uri[1];
         StorageReference filePath = null;
@@ -195,7 +195,7 @@ public class WebDocChat {
                 public void onComplete(@NonNull Task<Uri> task) {
                     if (task.isSuccessful()) {
                         downloadUri[0] = task.getResult();
-                        messageSend(databaseReference, senderAppName, receiverAppName, downloadUri[0].toString(), sender, receiver, type);
+                        messageSend(context, databaseReference, senderAppName, receiverAppName, downloadUri[0].toString(), sender, receiver, type);
                     } else {
                         // Handle failures
                         //Toast.makeText(MessagesActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -212,7 +212,7 @@ public class WebDocChat {
         FirebaseDatabase databaseReference = FirebaseDatabase.getInstance(appReference);
         FirebaseStorage storageReference = FirebaseStorage.getInstance(appReference);
 
-        uploadFile(databaseReference, storageReference, senderAppName, receiverAppName, fileUri, sender, receiver, msgType);
+        uploadFile(context, databaseReference, storageReference, senderAppName, receiverAppName, fileUri, sender, receiver, msgType);
     }
 
     public static void sendMessage(Context context, final String senderAppName, final String receiverAppName, final String msg, final String sender, final String receiver, String msgType)
@@ -220,7 +220,7 @@ public class WebDocChat {
         FirebaseApp appReference = firebaseAppReference(context);
         FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
 
-        messageSend(reference, senderAppName, receiverAppName, msg, sender, receiver, msgType);
+        messageSend(context, reference, senderAppName, receiverAppName, msg, sender, receiver, msgType);
     }
 
     public static void getMessage(final Context ctx, final String AppName, final String personalEmail, final String chatUserEmail) {
@@ -342,7 +342,7 @@ public class WebDocChat {
         });
     }
 
-    private static void sendNotification(FirebaseDatabase reference, final String senderAppName, final String receiverAppName, final String sender, final String receiver, final String msg, final String msgType) {
+    private static void sendNotification(final Context context, FirebaseDatabase reference, final String senderAppName, final String receiverAppName, final String sender, final String receiver, final String msg, final String msgType) {
         DatabaseReference tokens = reference.getReference("Tokens").child(receiverAppName);
         Query query = tokens.orderByKey().equalTo(receiver);
         query.addValueEventListener(new ValueEventListener() {
@@ -358,7 +358,7 @@ public class WebDocChat {
 
                     if(msgType.equalsIgnoreCase("image"))
                     {
-                        data = new Data(sender, sender + ": " + "sent you a photo " + R.drawable.ic_camera, senderAppName, "Sent");
+                        data = new Data(sender, sender + ": " + "sent you a photo " + context.getResources().getDrawable(R.drawable.ic_camera), senderAppName, "Sent");
                     }
                     else
                     {
@@ -401,7 +401,7 @@ public class WebDocChat {
         reference.child(AppName).child(Userid).setValue(token1);
     }
 
-    private static String messageSend(final FirebaseDatabase reference, final String senderAppName, final String receiverAppName, final String msg, final String sender, final String receiver, final String msgType)
+    private static String messageSend(final Context context, final FirebaseDatabase reference, final String senderAppName, final String receiverAppName, final String msg, final String sender, final String receiver, final String msgType)
     {
         final boolean[] notify = {false};
         notify[0] = true;
@@ -437,7 +437,7 @@ public class WebDocChat {
                 if (task.isSuccessful()) {
                     response[0] = "success";
                     if (notify[0]) {
-                        sendNotification(reference, senderAppName, receiverAppName, sender, receiver, msg, msgType);
+                        sendNotification(context, reference, senderAppName, receiverAppName, sender, receiver, msg, msgType);
                     }
                     notify[0] = false;
                 } else {
