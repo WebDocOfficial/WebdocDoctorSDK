@@ -3,6 +3,7 @@ package com.webdocchat;
 import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -358,7 +359,7 @@ public class WebDocChat {
 
                     if(msgType.equalsIgnoreCase("image"))
                     {
-                        data = new Data(sender, sender + ": " + "sent you a photo " + context.getResources().getDrawable(R.drawable.ic_camera), senderAppName, "Sent");
+                        data = new Data(sender, sender + ": " + "sent you a photo " + ContextCompat.getDrawable(context, R.drawable.ic_camera), senderAppName, "Sent");
                     }
                     else
                     {
