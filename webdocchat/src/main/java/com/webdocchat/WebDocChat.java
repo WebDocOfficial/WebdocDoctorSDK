@@ -358,7 +358,7 @@ public class WebDocChat {
 
                     if(msgType.equalsIgnoreCase("image"))
                     {
-                        data = new Data(sender, sender + ": " + "sent you a photo", senderAppName, "Sent");
+                        data = new Data(sender, sender + ": " + "sent you a photo " + R.drawable.ic_camera, senderAppName, "Sent");
                     }
                     else
                     {
