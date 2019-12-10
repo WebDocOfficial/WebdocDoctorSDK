@@ -568,22 +568,32 @@ public class WebDocChat {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
 
-                                Global.ChatUsersList.clear();
+                                Global.chatIDs.clear();
 
                                 for (final DataSnapshot snapshot1 : dataSnapshot1.getChildren()) {
 
-                                    dbReference.child("Users").child(snapshot.getKey()).child(snapshot1.getKey()).addValueEventListener(new ValueEventListener() {
+                                    Global.chatIDs.add(snapshot1.getKey());
+
+                                    dbReference.child("Users").child(snapshot.getKey()).addValueEventListener(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                            ChatUserModel tempUser = new ChatUserModel();
-                                            tempUser.setStatus(dataSnapshot.child("status").getValue().toString());
-                                            tempUser.setName(dataSnapshot.child("name").getValue().toString());
-                                            tempUser.setAppName(snapshot.getKey());
-                                            tempUser.setFirebaseEmail(snapshot1.getKey());
-                                            tempUser.setEmail(dataSnapshot.child("email").getValue().toString());
+                                            Global.ChatUsersList.clear();
 
-                                            Global.ChatUsersList.add(tempUser);
+                                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                                                ChatUserModel tempUser = new ChatUserModel();
+                                                tempUser.setStatus(dataSnapshot.child("status").getValue().toString());
+                                                tempUser.setName(dataSnapshot.child("name").getValue().toString());
+                                                tempUser.setAppName(snapshot.getKey());
+                                                tempUser.setFirebaseEmail(snapshot1.getKey());
+                                                tempUser.setEmail(dataSnapshot.child("email").getValue().toString());
+
+                                                if(Global.chatIDs.contains(snapshot1.getKey()))
+                                                {
+                                                    Global.ChatUsersList.add(tempUser);
+                                                }
+                                            }
 
                                             vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
 
@@ -595,7 +605,7 @@ public class WebDocChat {
                                         }
                                     });
 
-                                    vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
+                                    //vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
                                 }
                             }
 
