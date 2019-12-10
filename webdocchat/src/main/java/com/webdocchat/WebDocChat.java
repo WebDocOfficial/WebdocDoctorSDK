@@ -525,9 +525,11 @@ public class WebDocChat {
                     user.setStatus(snapshot.child("status").getValue().toString());
                     user.setAppName("PTCLHealth");
                     Global.ChatUsersList.add(user);
+
+                    vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
                 }
                 //DoctorsListFrag.doctorsListAdapter.notifyDataSetChanged();
-                vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
+                //vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
 
             }
 
