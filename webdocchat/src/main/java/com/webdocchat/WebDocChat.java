@@ -52,93 +52,6 @@ import retrofit2.Response;
 
 public class WebDocChat {
 
-    /*private static void FirebaseChatUsers(DatabaseReference reference, final ArrayList chatIDs)
-    {
-        reference.child("Users").child("PTCLHealth").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-            {
-                //GlobalNew.ListUsers.clear();
-
-                int i = 0;
-
-                for (DataSnapshot snapshot : dataSnapshot.getChildren())
-                {
-                    ChatUserModel tempUser = new ChatUserModel();
-                    tempUser.setStatus(dataSnapshot.child("status").getValue().toString());
-                    tempUser.setName(dataSnapshot.child("name").getValue().toString());
-                    tempUser.setAppName(snapshot.getKey());
-                    tempUser.setFirebaseEmail("firebaseEmail");
-                    tempUser.setEmail(dataSnapshot.child("email").getValue().toString());
-
-                    if(chatIDs.contains(snapshot.getKey()))
-                    {
-                        Global.ChatUsersList.add(tempUser);
-                        i++;
-                    }
-
-                    if (i == chatIDs.size())
-                    {
-                        if(!loadFirstTime)
-                        {
-                            loadFirstTime = true;
-                            selectFirstItemAsDefault();
-                            //GlobalNew.utils.dismissLoadingPopup();
-                        }
-
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }*/
-
-    /*public static void firebaseUsersforDoctors(Context context, String doctorID)
-    {
-        final ArrayList chatIDs = new ArrayList();
-
-        final WebdocChatUsersInterface webdocChatUsersInterface = (WebdocChatUsersInterface) context;
-
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        reference.child("Chat").child(doctorID).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-            {
-                if(dataSnapshot.getChildrenCount() == 0)
-                {
-                    webdocChatUsersInterface.ChatUsers(null);
-                    //GlobalNew.utils.dismissLoadingPopup();
-                }
-                else {
-                    //GlobalNew.ListUsers.clear();
-                    //chatIDs.clear();
-
-                    int i = 0;
-                    int size = (int) dataSnapshot.getChildrenCount();
-
-                    for (final DataSnapshot snapshot : dataSnapshot.getChildren())
-                    {
-                        chatIDs.add(snapshot.getKey());
-                        i++;
-
-                        if (i == size) {
-                            FirebaseChatUsers(chatIDs);
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }*/
-
     private static void uploadFile(final Context context, final FirebaseDatabase databaseReference, FirebaseStorage storageReference, final String senderAppName, final String receiverAppName, Uri fileUri, final String sender, final String receiver, final String type) {
 
         final Uri[] downloadUri = new Uri[1];
@@ -601,9 +514,6 @@ public class WebDocChat {
                                                 }
 
                                             }
-
-                                            //vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
-
                                         }
 
                                         @Override
@@ -611,8 +521,6 @@ public class WebDocChat {
 
                                         }
                                     });
-
-                                    //vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
                                 }
                             }
 
