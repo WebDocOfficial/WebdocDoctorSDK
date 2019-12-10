@@ -587,19 +587,16 @@ public class WebDocChat {
 
                                             Global.ChatUsersList.clear();
 
-                                            for (DataSnapshot Isnapshot : dataSnapshot.getChildren()) {
+                                            ChatUserModel tempUser = new ChatUserModel();
+                                            tempUser.setStatus(dataSnapshot.child("status").getValue().toString());
+                                            tempUser.setName(dataSnapshot.child("name").getValue().toString());
+                                            tempUser.setAppName(snapshot.getKey());
+                                            tempUser.setFirebaseEmail(snapshot1.getKey());
+                                            tempUser.setEmail(dataSnapshot.child("email").getValue().toString());
 
-                                                ChatUserModel tempUser = new ChatUserModel();
-                                                tempUser.setStatus(Isnapshot.child("status").getValue().toString());
-                                                tempUser.setName(Isnapshot.child("name").getValue().toString());
-                                                tempUser.setAppName(snapshot.getKey());
-                                                tempUser.setFirebaseEmail(snapshot1.getKey());
-                                                tempUser.setEmail(Isnapshot.child("email").getValue().toString());
+                                            Global.ChatUsersList.add(tempUser);
 
-                                                Global.ChatUsersList.add(tempUser);
-
-                                                vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
-                                            }
+                                            vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
 
                                         }
 
