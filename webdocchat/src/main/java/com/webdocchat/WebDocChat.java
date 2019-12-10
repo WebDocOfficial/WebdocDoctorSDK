@@ -562,8 +562,10 @@ public class WebDocChat {
 
             dbReference.child("Chat").child(email.replace(".", "")).addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for (final DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+                {
+                    for (final DataSnapshot snapshot : dataSnapshot.getChildren())
+                    {
                         dbReference.child("Chat").child(email.replace(".", "")).child(snapshot.getKey()).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
