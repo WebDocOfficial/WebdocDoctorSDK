@@ -585,11 +585,11 @@ public class WebDocChat {
                                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                                                 ChatUserModel tempUser = new ChatUserModel();
-                                                tempUser.setStatus(dataSnapshot.child("status").getValue().toString());
-                                                tempUser.setName(dataSnapshot.child("name").getValue().toString());
+                                                tempUser.setStatus(snapshot.child("status").getValue().toString());
+                                                tempUser.setName(snapshot.child("name").getValue().toString());
                                                 tempUser.setAppName(snapshot.getKey());
                                                 tempUser.setFirebaseEmail(snapshot1.getKey());
-                                                tempUser.setEmail(dataSnapshot.child("email").getValue().toString());
+                                                tempUser.setEmail(snapshot.child("email").getValue().toString());
 
                                                 for(int i = 0; i < Global.chatIDs.size(); i++ )
                                                 {
