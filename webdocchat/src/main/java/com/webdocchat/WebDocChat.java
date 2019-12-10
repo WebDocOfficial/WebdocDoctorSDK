@@ -509,7 +509,7 @@ public class WebDocChat {
 
         final WebdocChatUsersInterface vetDocChatUsersInterface = (WebdocChatUsersInterface) context;
 
-        DatabaseReference chatUsersReference = reference.getReference().child("Users").child("PTCLHealth");
+       /* DatabaseReference chatUsersReference = reference.getReference().child("Users").child("PTCLHealth");
         chatUsersReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -538,8 +538,8 @@ public class WebDocChat {
 
             }
         });
-
-        /*if ((appName.equalsIgnoreCase(String.valueOf(R.string.app_name))))
+*/
+        if ((appName.equalsIgnoreCase(String.valueOf(R.string.app_name))))
         {
             DatabaseReference chatUsersReference = reference.getReference().child("Users").child(String.valueOf(R.string.app_name));
             chatUsersReference.addValueEventListener(new ValueEventListener() {
@@ -557,9 +557,11 @@ public class WebDocChat {
                         user.setStatus(snapshot.child("status").getValue().toString());
                         user.setAppName(String.valueOf(R.string.app_name));
                         Global.ChatUsersList.add(user);
+
+                        vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
                     }
                     //DoctorsListFrag.doctorsListAdapter.notifyDataSetChanged();
-                    vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
+                    //vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
                 }
 
                 @Override
@@ -593,10 +595,7 @@ public class WebDocChat {
                                             tempUser.setEmail(dataSnapshot.child("email").getValue().toString());
 
                                             Global.ChatUsersList.add(tempUser);
-                                       *//*Toast.makeText(getActivity(), Global.chatUsersList.toString(), Toast.LENGTH_LONG).show();*//*
-                                           *//* if (ChatUsersListFrag.adapter != null) {
-                                                ChatUsersListFrag.adapter.notifyDataSetChanged();
-                                            }*//*
+
                                             vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
 
                                         }
@@ -621,7 +620,7 @@ public class WebDocChat {
 
                 }
             });
-        }*/
+        }
 
 
     }
