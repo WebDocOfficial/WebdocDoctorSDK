@@ -489,45 +489,6 @@ public class WebDocChat {
                 });
     }
 
-    private static void FirebaseChatUsers(FirebaseDatabase reference, final WebdocChatUsersInterface vetDocChatUsersInterface)
-    {
-        reference.getReference().child("Users").child("PTCLHealth").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-            {
-                Global.ChatUsersList.clear();
-
-                int i = 0;
-
-                for (DataSnapshot snapshot : dataSnapshot.getChildren())
-                {
-                    ChatUserModel tempUser = new ChatUserModel();
-                    tempUser.setStatus(dataSnapshot.child("status").getValue().toString());
-                    tempUser.setName(dataSnapshot.child("name").getValue().toString());
-                    tempUser.setAppName(snapshot.getKey());
-                    tempUser.setFirebaseEmail("firebaseEmail");
-                    tempUser.setEmail(dataSnapshot.child("email").getValue().toString());
-
-                    if(Global.chatIDs.contains(snapshot.getKey()))
-                    {
-                        Global.ChatUsersList.add(tempUser);
-                        i++;
-                    }
-
-                    if (i == Global.chatIDs.size())
-                    {
-                        vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
-
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
 
     public static void getChatUsersList(final Context context, final String email, String appName) {
 
@@ -597,7 +558,7 @@ public class WebDocChat {
                 }
             });
         } else {
-            /*final DatabaseReference dbReference = reference.getReference();
+            final DatabaseReference dbReference = reference.getReference();
 
             dbReference.child("Chat").child(email.replace(".", "")).addValueEventListener(new ValueEventListener() {
                 @Override
@@ -649,46 +610,7 @@ public class WebDocChat {
                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
-            });*/
-
-
-            //final ArrayList chatIDs = new ArrayList();
-
-            reference.getReference().child("Chat").child(email.replace(".","")).child("PTCLHealth").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-                {
-                    if(dataSnapshot.getChildrenCount() == 0)
-                    {
-                        //vetDocChatUsersInterface.ChatUsers(null);
-                        //GlobalNew.utils.dismissLoadingPopup();
-                    }
-                    else {
-                        //GlobalNew.ListUsers.clear();
-                        //chatIDs.clear();
-
-                        int i = 0;
-                        int size = (int) dataSnapshot.getChildrenCount();
-
-                        for (final DataSnapshot snapshot : dataSnapshot.getChildren())
-                        {
-                            Global.chatIDs.add(snapshot.getKey());
-                            i++;
-
-                            if (i == size) {
-                                FirebaseChatUsers(reference ,vetDocChatUsersInterface);
-                            }
-                        }
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
             });
-
-
         }
 
 
