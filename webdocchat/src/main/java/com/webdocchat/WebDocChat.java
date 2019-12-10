@@ -64,19 +64,16 @@ public class WebDocChat {
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren())
                 {
-                    String firebaseID = (String) snapshot.child("firebaseID").getValue();
-                    String userID = (String) snapshot.child("userID").getValue();
-                    String userName = (String) snapshot.child("userName").getValue();
-                    String status = (String) snapshot.child("status").getValue();
-                    Long lastSeen = (Long) snapshot.child("lastSeen").getValue();
-
-                    User user = new User(firebaseID, userID, userName, status, lastSeen);
-                    //Toast.makeText(_MainActivity.this, user.getUsername(), Toast.LENGTH_SHORT).show();
-                    Log.e("NAME------",user.getUsername());
+                    ChatUserModel tempUser = new ChatUserModel();
+                    tempUser.setStatus(dataSnapshot.child("status").getValue().toString());
+                    tempUser.setName(dataSnapshot.child("name").getValue().toString());
+                    tempUser.setAppName(snapshot.getKey());
+                    tempUser.setFirebaseEmail("firebaseEmail");
+                    tempUser.setEmail(dataSnapshot.child("email").getValue().toString());
 
                     if(chatIDs.contains(snapshot.getKey()))
                     {
-                        GlobalNew.ListUsers.add(user);
+                        Global.ChatUsersList.add(tempUser);
                         i++;
                     }
 
@@ -89,11 +86,6 @@ public class WebDocChat {
                             //GlobalNew.utils.dismissLoadingPopup();
                         }
 
-                            *//* Updating adapter *//*
-                        if(GlobalNew.isUserInChat)
-                        {
-                            ChatFragment.usersAdapter.notifyDataSetChanged();
-                        }
                     }
                 }
             }
@@ -103,9 +95,9 @@ public class WebDocChat {
 
             }
         });
-    }
+    }*/
 
-    public static void firebaseUsersforDoctors(Context context, String doctorID)
+    /*public static void firebaseUsersforDoctors(Context context, String doctorID)
     {
         final ArrayList chatIDs = new ArrayList();
 
@@ -119,8 +111,6 @@ public class WebDocChat {
                 if(dataSnapshot.getChildrenCount() == 0)
                 {
                     webdocChatUsersInterface.ChatUsers(null);
-                    *//*loadFirstTime = true;
-                    selectFirstItemAsDefault();*//*
                     //GlobalNew.utils.dismissLoadingPopup();
                 }
                 else {
@@ -140,9 +130,6 @@ public class WebDocChat {
                         }
                     }
                 }
-
-                *//*UsersAdapter usersAdapter = new UsersAdapter(ListUsers, true);
-                userRecyclerView.setAdapter(usersAdapter);*//*
             }
 
             @Override
@@ -502,6 +489,46 @@ public class WebDocChat {
                 });
     }
 
+    private static void FirebaseChatUsers(FirebaseDatabase reference, final WebdocChatUsersInterface vetDocChatUsersInterface)
+    {
+        reference.getReference().child("Users").child("PTCLHealth").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                Global.ChatUsersList.clear();
+
+                int i = 0;
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren())
+                {
+                    ChatUserModel tempUser = new ChatUserModel();
+                    tempUser.setStatus(dataSnapshot.child("status").getValue().toString());
+                    tempUser.setName(dataSnapshot.child("name").getValue().toString());
+                    tempUser.setAppName(snapshot.getKey());
+                    tempUser.setFirebaseEmail("firebaseEmail");
+                    tempUser.setEmail(dataSnapshot.child("email").getValue().toString());
+
+                    if(Global.chatIDs.contains(snapshot.getKey()))
+                    {
+                        Global.ChatUsersList.add(tempUser);
+                        i++;
+                    }
+
+                    if (i == Global.chatIDs.size())
+                    {
+                        vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     public static void getChatUsersList(final Context context, final String email, String appName) {
 
         FirebaseApp appReference = firebaseAppReference(context);
@@ -570,7 +597,7 @@ public class WebDocChat {
                 }
             });
         } else {
-            final DatabaseReference dbReference = reference.getReference();
+            /*final DatabaseReference dbReference = reference.getReference();
 
             dbReference.child("Chat").child(email.replace(".", "")).addValueEventListener(new ValueEventListener() {
                 @Override
@@ -622,7 +649,46 @@ public class WebDocChat {
                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
+            });*/
+
+
+            //final ArrayList chatIDs = new ArrayList();
+
+            reference.getReference().child("Chat").child(email).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+                {
+                    if(dataSnapshot.getChildrenCount() == 0)
+                    {
+                        //vetDocChatUsersInterface.ChatUsers(null);
+                        //GlobalNew.utils.dismissLoadingPopup();
+                    }
+                    else {
+                        //GlobalNew.ListUsers.clear();
+                        //chatIDs.clear();
+
+                        int i = 0;
+                        int size = (int) dataSnapshot.getChildrenCount();
+
+                        for (final DataSnapshot snapshot : dataSnapshot.getChildren())
+                        {
+                            Global.chatIDs.add(snapshot.getKey());
+                            i++;
+
+                            if (i == size) {
+                                FirebaseChatUsers(reference ,vetDocChatUsersInterface);
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
             });
+
+
         }
 
 
