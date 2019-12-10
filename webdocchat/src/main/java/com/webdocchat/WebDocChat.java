@@ -654,7 +654,7 @@ public class WebDocChat {
 
             //final ArrayList chatIDs = new ArrayList();
 
-            reference.getReference().child("Chat").child(email).addValueEventListener(new ValueEventListener() {
+            reference.getReference().child("Chat").child(email.replace(".","")).child("PTCLHealth").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot)
                 {
