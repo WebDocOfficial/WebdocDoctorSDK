@@ -580,12 +580,12 @@ public class WebDocChat {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
 
+                                int length = (int) dataSnapshot1.getChildrenCount();
+
                                 for (final DataSnapshot snapshot1 : dataSnapshot1.getChildren()) {
                                     dbReference.child("Users").child(snapshot.getKey()).child(snapshot1.getKey()).addValueEventListener(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                                            Global.ChatUsersList.clear();
 
                                             ChatUserModel tempUser = new ChatUserModel();
                                             tempUser.setStatus(dataSnapshot.child("status").getValue().toString());
@@ -596,8 +596,6 @@ public class WebDocChat {
 
                                             Global.ChatUsersList.add(tempUser);
 
-                                            vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
-
                                         }
 
                                         @Override
@@ -605,6 +603,9 @@ public class WebDocChat {
 
                                         }
                                     });
+
+                                    vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
+                                    Global.ChatUsersList.clear();
                                 }
                             }
 
