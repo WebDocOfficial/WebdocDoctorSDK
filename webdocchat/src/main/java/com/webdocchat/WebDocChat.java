@@ -410,36 +410,6 @@ public class WebDocChat {
 
         final WebdocChatUsersInterface vetDocChatUsersInterface = (WebdocChatUsersInterface) context;
 
-       /* DatabaseReference chatUsersReference = reference.getReference().child("Users").child("PTCLHealth");
-        chatUsersReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                Global.ChatUsersList.clear();
-
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    ChatUserModel user = new ChatUserModel();
-
-                    user.setFirebaseEmail(snapshot.getKey());
-                    user.setName(snapshot.child("name").getValue().toString());
-                    user.setEmail(snapshot.child("email").getValue().toString());
-                    user.setStatus(snapshot.child("status").getValue().toString());
-                    user.setAppName("PTCLHealth");
-                    Global.ChatUsersList.add(user);
-
-                    vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
-                }
-                //DoctorsListFrag.doctorsListAdapter.notifyDataSetChanged();
-                //vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-*/
         if ((appName.equalsIgnoreCase(String.valueOf(R.string.app_name))))
         {
             DatabaseReference chatUsersReference = reference.getReference().child("Users").child(String.valueOf(R.string.app_name));
@@ -461,8 +431,6 @@ public class WebDocChat {
 
                         vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
                     }
-                    //DoctorsListFrag.doctorsListAdapter.notifyDataSetChanged();
-                    //vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
                 }
 
                 @Override
