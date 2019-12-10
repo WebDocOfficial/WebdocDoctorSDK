@@ -591,13 +591,18 @@ public class WebDocChat {
                                                 tempUser.setFirebaseEmail(snapshot1.getKey());
                                                 tempUser.setEmail(dataSnapshot.child("email").getValue().toString());
 
-                                                if(Global.chatIDs.contains(snapshot1.getKey()))
+                                                for(int i = 0; i < Global.chatIDs.size(); i++ )
                                                 {
-                                                    Global.ChatUsersList.add(tempUser);
+                                                    if(Global.chatIDs.get(i).equals(snapshot1.getKey()))
+                                                    {
+                                                        Global.ChatUsersList.add(tempUser);
+                                                        vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
+                                                    }
                                                 }
+
                                             }
 
-                                            vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
+                                            //vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
 
                                         }
 
