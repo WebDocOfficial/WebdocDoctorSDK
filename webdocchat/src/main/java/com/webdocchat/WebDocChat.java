@@ -153,7 +153,7 @@ public class WebDocChat {
                     msg.setMessageStatus(snapshot.child("MessageStatus").getValue().toString());
                     msgData.add(msg);
                 }
-                seenStatus(reference, AppName, personalEmail, chatUserEmail, finalChatKey);
+                //seenStatus(reference, AppName, personalEmail, chatUserEmail, finalChatKey);
                 listener.getMessagesResponse(msgData);
             }
 
@@ -215,10 +215,15 @@ public class WebDocChat {
         });
     }
 
-    private static void seenStatus(FirebaseDatabase reference, String AppName, final String personalEmail, final String chatUserEmail, String UsersChatKey) {
+    public static void stopSeenStatus()
+    {
+        Global.seenReference.removeEventListener(Global.seenListener);
+    }
 
-        final DatabaseReference changeMsgSeenStatusReference = reference.getReference().child("Messages").child(AppName).child(UsersChatKey);
-        changeMsgSeenStatusReference.addValueEventListener(new ValueEventListener() {
+    public static void seenStatus(FirebaseDatabase reference, String AppName, final String personalEmail, final String chatUserEmail, String UsersChatKey) {
+
+        Global.seenReference = reference.getReference().child("Messages").child(AppName).child(UsersChatKey);
+        Global.seenListener = Global.seenReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot)
             {
@@ -230,7 +235,7 @@ public class WebDocChat {
                     {
                         HashMap<String, Object> hashMap = new HashMap<String, Object>();
                         hashMap.put("MessageStatus", "seen");
-                        changeMsgSeenStatusReference.child(snapshot.getKey()).updateChildren(hashMap);
+                        snapshot.getRef().updateChildren(hashMap);
                     }
                 }
             }
