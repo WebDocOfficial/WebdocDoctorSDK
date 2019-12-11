@@ -148,12 +148,12 @@ public class WebDocChat {
                     msg.setSender(snapshot.child("sender").getValue().toString());
                     msg.setReceiver(snapshot.child("receiver").getValue().toString());
                     msg.setMessage(snapshot.child("message").getValue().toString());
-                    msg.setTimestamp(Long.parseLong(snapshot.child("timestamp").getValue().toString()));
+                    msg.setTimestamp(snapshot.child("timestamp").getValue().toString());
                     msg.setType(snapshot.child("type").getValue().toString());
                     msg.setMessageStatus(snapshot.child("MessageStatus").getValue().toString());
                     msgData.add(msg);
                 }
-                seenStatus(reference, AppName, personalEmail, chatUserEmail, finalChatKey);
+                //seenStatus(reference, AppName, personalEmail, chatUserEmail, finalChatKey);
                 listener.getMessagesResponse(msgData);
             }
 

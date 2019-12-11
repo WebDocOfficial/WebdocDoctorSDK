@@ -10,7 +10,7 @@ public class MessageDataModel {
     private String receiver;
     private String Message;
     private String MessageStatus;
-    private long timestamp;
+    private String timestamp;
     private String type;
 
 
@@ -46,9 +46,9 @@ public class MessageDataModel {
         MessageStatus = messageStatus;
     }
 
-    public long getTimestamp() { return timestamp; }
+    public String getTimestamp() { return timestamp; }
 
-    public void setTimestamp(long timestamp) { this.timestamp = timestamp; }
+    public void setTimestamp(String timestamp) { this.timestamp = timestamp; }
 
     public String getType() {
         return type;
