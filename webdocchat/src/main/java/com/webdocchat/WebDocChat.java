@@ -222,12 +222,15 @@ public class WebDocChat {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot)
             {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren())
+                {
                     MessageDataModel messages = snapshot.getValue(MessageDataModel.class);
-                    if (messages.getReceiver().equals(personalEmail) && messages.getSender().equals(chatUserEmail)) {
+
+                    if (messages.getReceiver().equals(personalEmail) && messages.getSender().equals(chatUserEmail))
+                    {
                         HashMap<String, Object> hashMap = new HashMap<String, Object>();
                         hashMap.put("MessageStatus", "seen");
-                        snapshot.getRef().updateChildren(hashMap);
+                        changeMsgSeenStatusReference.child(snapshot.getKey()).updateChildren(hashMap);
                     }
                 }
             }
