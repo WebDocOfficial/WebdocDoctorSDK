@@ -220,7 +220,8 @@ public class WebDocChat {
         final DatabaseReference changeMsgSeenStatusReference = reference.getReference().child("Messages").child(AppName).child(UsersChatKey);
         changeMsgSeenStatusReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     MessageDataModel messages = snapshot.getValue(MessageDataModel.class);
                     if (messages.getReceiver().equals(personalEmail) && messages.getSender().equals(chatUserEmail)) {
