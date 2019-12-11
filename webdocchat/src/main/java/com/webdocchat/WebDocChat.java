@@ -153,7 +153,7 @@ public class WebDocChat {
                     msg.setMessageStatus(snapshot.child("MessageStatus").getValue().toString());
                     msgData.add(msg);
                 }
-                //seenStatus(reference, AppName, personalEmail, chatUserEmail, finalChatKey);
+                seenStatus(reference, AppName, personalEmail, chatUserEmail, finalChatKey);
                 listener.getMessagesResponse(msgData);
             }
 
