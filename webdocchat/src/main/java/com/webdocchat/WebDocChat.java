@@ -220,7 +220,16 @@ public class WebDocChat {
         Global.seenReference.removeEventListener(Global.seenListener);
     }
 
-    public static void seenStatus(FirebaseDatabase reference, String AppName, final String personalEmail, final String chatUserEmail, String UsersChatKey) {
+    public static void seenStatus(Context context, String AppName, final String personalEmail, final String chatUserEmail) {
+
+        FirebaseApp appReference = firebaseAppReference(context);
+        final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
+
+        ArrayList TwoChattingUsersID = new ArrayList<>();
+        TwoChattingUsersID.add(personalEmail);
+        TwoChattingUsersID.add(chatUserEmail);
+        Collections.sort(TwoChattingUsersID);
+        String UsersChatKey = TwoChattingUsersID.get(0) + "_" + TwoChattingUsersID.get(1);
 
         Global.seenReference = reference.getReference().child("Messages").child(AppName).child(UsersChatKey);
         Global.seenListener = Global.seenReference.addValueEventListener(new ValueEventListener() {
