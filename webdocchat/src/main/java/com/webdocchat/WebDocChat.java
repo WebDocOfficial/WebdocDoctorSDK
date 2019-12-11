@@ -224,6 +224,7 @@ public class WebDocChat {
             {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren())
                 {
+                    Log.e("STRING-------", snapshot.getKey());
                     MessageDataModel messages = snapshot.getValue(MessageDataModel.class);
 
                     if (messages.getReceiver().equals(personalEmail) && messages.getSender().equals(chatUserEmail))
