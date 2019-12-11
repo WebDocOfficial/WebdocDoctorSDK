@@ -226,13 +226,7 @@ public class WebDocChat {
                     if (messages.getReceiver().equals(personalEmail) && messages.getSender().equals(chatUserEmail)) {
                         HashMap<String, Object> hashMap = new HashMap<String, Object>();
                         hashMap.put("MessageStatus", "seen");
-                        changeMsgSeenStatusReference.updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                }
-                            }
-                        });
+                        changeMsgSeenStatusReference.updateChildren(hashMap);
                     }
                 }
             }
