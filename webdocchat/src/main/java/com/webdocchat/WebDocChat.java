@@ -227,7 +227,7 @@ public class WebDocChat {
                     if (messages.getReceiver().equals(personalEmail) && messages.getSender().equals(chatUserEmail)) {
                         HashMap<String, Object> hashMap = new HashMap<String, Object>();
                         hashMap.put("MessageStatus", "seen");
-                        changeMsgSeenStatusReference.updateChildren(hashMap);
+                        snapshot.getRef().updateChildren(hashMap);
                     }
                 }
             }
