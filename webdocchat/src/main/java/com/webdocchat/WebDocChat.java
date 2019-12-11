@@ -153,7 +153,7 @@ public class WebDocChat {
                     msg.setMessageStatus(snapshot.child("MessageStatus").getValue().toString());
                     msgData.add(msg);
                 }
-                seenStatus(AppName, personalEmail, chatUserEmail, finalChatKey);
+                seenStatus(reference, AppName, personalEmail, chatUserEmail, finalChatKey);
                 listener.getMessagesResponse(msgData);
             }
 
@@ -215,9 +215,9 @@ public class WebDocChat {
         });
     }
 
-    private static void seenStatus(String AppName, final String personalEmail, final String chatUserEmail, String UsersChatKey) {
+    private static void seenStatus(FirebaseDatabase reference, String AppName, final String personalEmail, final String chatUserEmail, String UsersChatKey) {
 
-        DatabaseReference changeMsgSeenStatusReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference changeMsgSeenStatusReference = reference.getReference();
         changeMsgSeenStatusReference.child("Messages").child(AppName).child(UsersChatKey).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
