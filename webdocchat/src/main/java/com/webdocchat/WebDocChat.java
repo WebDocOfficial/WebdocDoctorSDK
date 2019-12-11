@@ -153,7 +153,7 @@ public class WebDocChat {
                     msg.setMessageStatus(snapshot.child("MessageStatus").getValue().toString());
                     msgData.add(msg);
                 }
-                //seenStatus(reference, AppName, personalEmail, chatUserEmail, finalChatKey);
+                seenStatus(reference, AppName, personalEmail, chatUserEmail, finalChatKey);
                 listener.getMessagesResponse(msgData);
             }
 
@@ -217,8 +217,8 @@ public class WebDocChat {
 
     private static void seenStatus(FirebaseDatabase reference, String AppName, final String personalEmail, final String chatUserEmail, String UsersChatKey) {
 
-        DatabaseReference changeMsgSeenStatusReference = reference.getReference();
-        changeMsgSeenStatusReference.child("Messages").child(AppName).child(UsersChatKey).addValueEventListener(new ValueEventListener() {
+        final DatabaseReference changeMsgSeenStatusReference = reference.getReference().child("Messages").child(AppName).child(UsersChatKey);
+        changeMsgSeenStatusReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -226,7 +226,7 @@ public class WebDocChat {
                     if (messages.getReceiver().equals(personalEmail) && messages.getSender().equals(chatUserEmail)) {
                         HashMap<String, Object> hashMap = new HashMap<String, Object>();
                         hashMap.put("MessageStatus", "seen");
-                        snapshot.getRef().updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        changeMsgSeenStatusReference.updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
