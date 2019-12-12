@@ -439,6 +439,7 @@ public class WebDocChat {
                         user.setEmail(snapshot.child("email").getValue().toString());
                         user.setStatus(snapshot.child("status").getValue().toString());
                         user.setAppName(String.valueOf(R.string.app_name));
+                        
                         Global.ChatUsersList.add(user);
 
                         vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
