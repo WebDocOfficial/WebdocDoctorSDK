@@ -490,7 +490,7 @@ public class WebDocChat {
                                                     if(Global.chatIDs.get(i).equals(snapshot1.getKey()))
                                                     {
                                                         Global.ChatUsersList.add(user);
-                                                        
+
                                                         vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
                                                     }
                                                 }
