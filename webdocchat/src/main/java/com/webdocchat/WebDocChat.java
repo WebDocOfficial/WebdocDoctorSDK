@@ -477,18 +477,20 @@ public class WebDocChat {
 
                                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                                                ChatUserModel tempUser = new ChatUserModel();
-                                                tempUser.setStatus(snapshot.child("status").getValue().toString());
-                                                tempUser.setName(snapshot.child("name").getValue().toString());
-                                                tempUser.setAppName(snapshot.getKey());
-                                                tempUser.setFirebaseEmail(snapshot1.getKey());
-                                                tempUser.setEmail(snapshot.child("email").getValue().toString());
+                                                ChatUserModel user = new ChatUserModel();
+
+                                                user.setStatus(snapshot.child("status").getValue().toString());
+                                                user.setName(snapshot.child("name").getValue().toString());
+                                                user.setAppName(snapshot.getKey());
+                                                user.setFirebaseEmail(snapshot1.getKey());
+                                                user.setEmail(snapshot.child("email").getValue().toString());
 
                                                 for(int i = 0; i < Global.chatIDs.size(); i++ )
                                                 {
                                                     if(Global.chatIDs.get(i).equals(snapshot1.getKey()))
                                                     {
-                                                        Global.ChatUsersList.add(tempUser);
+                                                        Global.ChatUsersList.add(user);
+                                                        
                                                         vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
                                                     }
                                                 }
@@ -524,7 +526,6 @@ public class WebDocChat {
     public static void isUserLoggedIn(Context context)
     {
         FirebaseApp appReference = firebaseAppReference(context);
-        final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
         final FirebaseAuth mAuth = com.google.firebase.auth.FirebaseAuth.getInstance(appReference);
 
         final RegisterUserForChatInterface listener = (RegisterUserForChatInterface) context;
