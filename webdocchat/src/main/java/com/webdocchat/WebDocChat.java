@@ -469,7 +469,7 @@ public class WebDocChat {
 
                                             ChatUserModel tempUser = new ChatUserModel();
                                             tempUser.setStatus(dataSnapshot.child("status").getValue().toString());
-                                            tempUser.setName(dataSnapshot.child("username").getValue().toString());
+                                            tempUser.setName(dataSnapshot.child("name").getValue().toString());
                                             tempUser.setAppName(snapshot.getKey());
                                             tempUser.setFirebaseEmail(snapshot1.getKey());
                                             Global.ChatUsersList.add(tempUser);
