@@ -454,50 +454,31 @@ public class WebDocChat {
             });
         } else {
             final DatabaseReference dbReference = reference.getReference();
-
             dbReference.child("Chat").child(email.replace(".", "")).addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-                {
-                    for (final DataSnapshot snapshot : dataSnapshot.getChildren())
-                    {
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (final DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         dbReference.child("Chat").child(email.replace(".", "")).child(snapshot.getKey()).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
 
-                                Global.chatIDs.clear();
-
                                 for (final DataSnapshot snapshot1 : dataSnapshot1.getChildren()) {
-
-                                    Global.chatIDs.add(snapshot1.getKey());
-
-                                    dbReference.child("Users").child(snapshot.getKey()).addValueEventListener(new ValueEventListener() {
+                                    dbReference.child("Users").child(snapshot.getKey()).child(snapshot1.getKey()).addValueEventListener(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                            Global.ChatUsersList.clear();
+                                            ChatUserModel tempUser = new ChatUserModel();
+                                            tempUser.setStatus(dataSnapshot.child("status").getValue().toString());
+                                            tempUser.setName(dataSnapshot.child("username").getValue().toString());
+                                            tempUser.setAppName(snapshot.getKey());
+                                            tempUser.setFirebaseEmail(snapshot1.getKey());
+                                            Global.ChatUsersList.add(tempUser);
+                                       /*Toast.makeText(getActivity(), Global.chatUsersList.toString(), Toast.LENGTH_LONG).show();*/
+                                           /* if (ChatUsersListFrag.adapter != null) {
+                                                ChatUsersListFrag.adapter.notifyDataSetChanged();
+                                            }*/
+                                            vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
 
-                                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
-                                                ChatUserModel user = new ChatUserModel();
-
-                                                user.setStatus(snapshot.child("status").getValue().toString());
-                                                user.setName(snapshot.child("name").getValue().toString());
-                                                user.setAppName(snapshot.getKey());
-                                                user.setFirebaseEmail(snapshot1.getKey());
-                                                user.setEmail(snapshot.child("email").getValue().toString());
-
-                                                for(int i = 0; i < Global.chatIDs.size(); i++ )
-                                                {
-                                                    if(Global.chatIDs.get(i).equals(snapshot1.getKey()))
-                                                    {
-                                                        Global.ChatUsersList.add(user);
-
-                                                        vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
-                                                    }
-                                                }
-
-                                            }
                                         }
 
                                         @Override

@@ -15,7 +15,6 @@ import java.util.List;
 public class Global {
 
     public static List<ChatUserModel> ChatUsersList = new ArrayList<>();
-    public static ArrayList chatIDs = new ArrayList<>();
 
     public static DatabaseReference seenReference;
     public static ValueEventListener seenListener;
