@@ -59,12 +59,9 @@ public class WebDocChat {
         StorageTask uploadTask;
 
         if (fileUri != null) {
-            //progressDialog.show();
 
             DatabaseReference ref = databaseReference.getReference().child("Messages");
             String messageID = ref.push().getKey();
-
-            //String name = Environment.getExternalStorageDirectory().getAbsolutePath();
 
             switch (type) {
                 case "image":
@@ -99,7 +96,7 @@ public class WebDocChat {
                         messageSend(context, databaseReference, senderAppName, receiverAppName, downloadUri[0].toString(), sender, receiver, type);
                     } else {
                         // Handle failures
-                        //Toast.makeText(MessagesActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -132,13 +129,14 @@ public class WebDocChat {
         final List<MessageDataModel> msgData = new ArrayList();
         DatabaseReference chatReference = reference.getReference();
         final WebdocChatInterface listener = (WebdocChatInterface) ctx;
-        String chatKey = "";
+
         ArrayList TwoChattingUsersID = new ArrayList<>();
         TwoChattingUsersID.add(personalEmail);
         TwoChattingUsersID.add(chatUserEmail);
         Collections.sort(TwoChattingUsersID);
-        chatKey = TwoChattingUsersID.get(0) + "_" + TwoChattingUsersID.get(1);
-        final String finalChatKey = chatKey;
+
+        String chatKey = TwoChattingUsersID.get(0) + "_" + TwoChattingUsersID.get(1);
+
         chatReference.child("Messages").child(AppName).child(chatKey).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -153,7 +151,6 @@ public class WebDocChat {
                     msg.setMessageStatus(snapshot.child("MessageStatus").getValue().toString());
                     msgData.add(msg);
                 }
-                //seenStatus(reference, AppName, personalEmail, chatUserEmail, finalChatKey);
                 listener.getMessagesResponse(msgData);
             }
 
@@ -375,7 +372,6 @@ public class WebDocChat {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            //DatabaseReference firebaseDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child(appName).child(email.replace(".", ""));
                             DatabaseReference firebaseDatabaseReference = reference.getReference("Users").child(appName).child(email.replace(".", ""));
                             HashMap<String, Object> hashMap = new HashMap();
                             hashMap.put("name", name);
