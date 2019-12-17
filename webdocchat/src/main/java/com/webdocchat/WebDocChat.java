@@ -451,63 +451,50 @@ public class WebDocChat {
         } else {
             final DatabaseReference dbReference = reference.getReference();
 
-            dbReference.child("Chat").child(email.replace(".", "")).addValueEventListener(new ValueEventListener() {
+            dbReference.child("Chat").child(email.replace(".", "")).child("PTCLHealth").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot)
                 {
+                    Global.chatIDs.clear();
+
                     for (final DataSnapshot snapshot : dataSnapshot.getChildren())
                     {
-                        dbReference.child("Chat").child(email.replace(".", "")).child(snapshot.getKey()).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
+                            Global.chatIDs.add(snapshot.getKey());
 
-                                Global.chatIDs.clear();
+                            dbReference.child("Users").child("PTCLHealth").addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                for (final DataSnapshot snapshot1 : dataSnapshot1.getChildren()) {
+                                    Global.ChatUsersList.clear();
 
-                                    Global.chatIDs.add(snapshot1.getKey());
+                                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                                    dbReference.child("Users").child(snapshot.getKey()).addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        ChatUserModel user = new ChatUserModel();
 
-                                            Global.ChatUsersList.clear();
+                                        user.setStatus(snapshot.child("status").getValue().toString());
+                                        user.setName(snapshot.child("name").getValue().toString());
+                                        user.setAppName(snapshot.getKey());
+                                        user.setFirebaseEmail(snapshot.getKey());
+                                        user.setEmail(snapshot.child("email").getValue().toString());
 
-                                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                        for(int i = 0; i < Global.chatIDs.size(); i++ )
+                                        {
+                                            if(Global.chatIDs.get(i).equals(snapshot.getKey()))
+                                            {
+                                                Global.ChatUsersList.add(user);
 
-                                                ChatUserModel user = new ChatUserModel();
-
-                                                user.setStatus(snapshot.child("status").getValue().toString());
-                                                user.setName(snapshot.child("name").getValue().toString());
-                                                user.setAppName(snapshot.getKey());
-                                                user.setFirebaseEmail(snapshot1.getKey());
-                                                user.setEmail(snapshot.child("email").getValue().toString());
-
-                                                for(int i = 0; i < Global.chatIDs.size(); i++ )
-                                                {
-                                                    if(Global.chatIDs.get(i).equals(snapshot1.getKey()))
-                                                    {
-                                                        Global.ChatUsersList.add(user);
-
-                                                        vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
-                                                    }
-                                                }
-
+                                                vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
                                             }
                                         }
 
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                        }
-                                    });
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                            }
-                        });
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
                     }
                 }
 
