@@ -3,8 +3,6 @@ package com.webdocchat;
 import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
@@ -27,7 +25,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
+import com.webdocchat.Models.CallHistoryDataModel;
 import com.webdocchat.Models.ChatUserModel;
+import com.webdocchat.Models.MessageDataModel;
 import com.webdocchat.NotificationManager.APIService;
 import com.webdocchat.NotificationManager.Client;
 import com.webdocchat.NotificationManager.Data;
@@ -519,6 +519,45 @@ public class WebDocChat {
         }
 
 
+    }
+
+    public static void callHistory(Context context, String email)
+    {
+        FirebaseApp appReference = firebaseAppReference(context);
+        final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
+
+        final WebdocCallHistoryInterface callHistoryInterface = (WebdocCallHistoryInterface) context;
+
+        reference.getReference().child("WebDocCallHistory").child(email).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                Global.callHistoryData.clear();
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren())
+                {
+                    CallHistoryDataModel newItem = new CallHistoryDataModel();
+
+                    newItem.setCallerId(snapshot.child("caller_id").getValue().toString());
+                    newItem.setCallHistoryId(snapshot.child("id").getValue().toString());
+                    newItem.setCallType(snapshot.child("callType").getValue().toString());
+                    newItem.setDoctorId(snapshot.child("doctorId").getValue().toString());
+                    newItem.setEstablishedTime(snapshot.child("EstablishedTime").getValue().toString());
+                    newItem.setIsMissedCall(snapshot.child("isMissedCall").getValue().toString());
+                    newItem.setTimeStamp(Long.parseLong(snapshot.child("timeStamp").getValue().toString()));
+
+                    Global.callHistoryData.add(newItem);
+
+                    callHistoryInterface.getCallHistoryResponse(Global.callHistoryData);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public static void isUserLoggedIn(Context context)

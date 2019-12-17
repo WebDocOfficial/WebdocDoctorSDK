@@ -1,5 +1,7 @@
 package com.webdocchat;
 
+import com.webdocchat.Models.MessageDataModel;
+
 import java.util.List;
 
 /**

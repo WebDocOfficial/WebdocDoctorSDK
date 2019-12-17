@@ -1,4 +1,4 @@
-package com.webdocchat;
+package com.webdocchat.Models;
 
 /**
  * Created by WaleedPCC on 9/30/2019.
