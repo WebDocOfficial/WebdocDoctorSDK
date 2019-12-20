@@ -149,6 +149,7 @@ public class WebDocChat {
                     msg.setTimestamp(Long.parseLong(snapshot.child("timestamp").getValue().toString()));
                     msg.setType(snapshot.child("type").getValue().toString());
                     msg.setMessageStatus(snapshot.child("MessageStatus").getValue().toString());
+                    msg.setMessageID(snapshot.child("messageID").getValue().toString());
                     msgData.add(msg);
                 }
                 listener.getMessagesResponse(msgData);
