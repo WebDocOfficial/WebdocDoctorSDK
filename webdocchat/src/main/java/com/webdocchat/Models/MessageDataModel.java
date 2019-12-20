@@ -12,6 +12,7 @@ public class MessageDataModel {
     private String MessageStatus;
     private long timestamp;
     private String type;
+    private String MessageID;
 
 
     public String getSender() {
@@ -57,4 +58,8 @@ public class MessageDataModel {
     public void setType(String type) {
         this.type = type;
     }
+
+    public String getMessageID() { return MessageID; }
+
+    public void setMessageID(String messageID) { MessageID = messageID; }
 }
