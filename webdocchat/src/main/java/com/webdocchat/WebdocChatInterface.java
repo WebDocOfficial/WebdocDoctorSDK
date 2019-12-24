@@ -12,9 +12,5 @@ public interface WebdocChatInterface {
 
     public void getMessagesResponse(List<MessageDataModel> msgList);
 
-    public void onUserStatusChangedResponse(String response);
-
-    public void onChangeUserStatusResponse(String status, String lastSeen);
-
-    public void onMessageSentResponse(String Response);
+    public void onUserStatusCheckResponse(String status, String lastSeen);
 }

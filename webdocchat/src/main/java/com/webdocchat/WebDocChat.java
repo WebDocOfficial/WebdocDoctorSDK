@@ -36,6 +36,7 @@ import com.webdocchat.NotificationManager.Sender;
 import com.webdocchat.NotificationManager.Token;
 import com.webdocchat.TimeAgo.TimeAgo;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -161,7 +162,7 @@ public class WebDocChat {
         });
     }
 
-    public static String changeStatus(Context ctx, String AppName, String UserId, String status)
+    public static void changeStatus(Context ctx, String AppName, String UserId, String status)
     {
         FirebaseApp appReference = firebaseAppReference(ctx);
         final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
@@ -174,20 +175,7 @@ public class WebDocChat {
         HashMap<String, Object> param = new HashMap<>();
         param.put("status", status);
         param.put("timestamp", ServerValue.TIMESTAMP);
-        dbReference.updateChildren(param).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    response[0] = "success";
-                    listener.onUserStatusChangedResponse(response[0]);
-                } else {
-                    response[0] = task.getException().getMessage().toString();
-                    listener.onUserStatusChangedResponse(response[0]);
-                }
-            }
-        });
-
-        return response[0];
+        dbReference.updateChildren(param);
     }
 
     public static void checkStatus(final Context ctx, String AppName, String UserId) {
@@ -203,12 +191,12 @@ public class WebDocChat {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String status = (String) dataSnapshot.child("status").getValue();
                 long lastSeen = (long) dataSnapshot.child("timestamp").getValue();
-                listener.onChangeUserStatusResponse(status, TimeAgo.getTimeAgo(lastSeen, ctx));
+                listener.onUserStatusCheckResponse(status, TimeAgo.getTimeAgo(lastSeen, ctx));
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                listener.onChangeUserStatusResponse(databaseError.getMessage().toString(), "null");
+                listener.onUserStatusCheckResponse(databaseError.getMessage().toString(), "null");
             }
         });
     }
@@ -312,12 +300,12 @@ public class WebDocChat {
         reference.child(AppName).child(Userid).setValue(token1);
     }
 
-    private static String messageSend(final Context context, final FirebaseDatabase reference, final String senderAppName, final String receiverAppName, final String msg, final String sender, final String receiver, final String msgType)
+    private static void messageSend(final Context context, final FirebaseDatabase reference, final String senderAppName, final String receiverAppName, final String msg, final String sender, final String receiver, final String msgType)
     {
         final boolean[] notify = {false};
         notify[0] = true;
         String UsersChatKey = "";
-        final String[] response = {""};
+
         DatabaseReference chatReference = reference.getReference();
         String messageID = chatReference.push().getKey();
         HashMap<String, Object> hashMap = new HashMap<String, Object>();
@@ -345,19 +333,18 @@ public class WebDocChat {
         chatReference.child("Messages").child("PTCLHealth").child(UsersChatKey).child(messageID).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    response[0] = "success";
-                    if (notify[0]) {
+                if (task.isSuccessful())
+                {
+                    if (notify[0])
+                    {
                         sendNotification(context, reference, senderAppName, receiverAppName, sender, receiver, msg, msgType);
                     }
                     notify[0] = false;
                 } else {
-                    response[0] = task.getException().getMessage();
+                    Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
-        return response[0];
     }
 
     public static void registerUserForChat(Context context, final String appName, final String name, final String email, final String password) {
