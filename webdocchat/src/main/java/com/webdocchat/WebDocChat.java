@@ -177,7 +177,7 @@ public class WebDocChat {
 
         reference.child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).setValue(hashMap);
 
-        reference.child(receiverAppName).child(receiverAppName).child("LastMessage").child(senderEmail).setValue(hashMap);
+        reference.child(receiverAppName).child(receiverEmail).child("LastMessage").child(senderEmail).setValue(hashMap);
     }
 
     private static void lastMessageSent(FirebaseDatabase firebaseDatabase, String receiverAppName, String senderEmail, String receiverEmail)
