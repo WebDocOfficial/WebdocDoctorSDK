@@ -167,12 +167,13 @@ public class WebDocChat {
         });
     }
 
-    private static void lastMessage(FirebaseDatabase firebaseDatabase, String senderAppName, String receiverAppName, String senderEmail, String receiverEmail, String message)
+    private static void lastMessage(FirebaseDatabase firebaseDatabase, String senderAppName, String receiverAppName, String senderEmail, String receiverEmail, String messageType, String message)
     {
         DatabaseReference reference = firebaseDatabase.getReference("Users");
 
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("message", message);
+        hashMap.put("type", messageType);
 
         reference.child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).setValue(hashMap);
 
@@ -452,13 +453,7 @@ public class WebDocChat {
 
                     unreadMessagesCounter(reference, senderAppName, sender, receiver);
 
-                    if(msgType.equalsIgnoreCase("image"))
-                    {
-                        lastMessage(reference, senderAppName, receiverAppName, sender, receiver, "Photo");
-                    }
-                    else {
-                        lastMessage(reference, senderAppName, receiverAppName, sender, receiver, msg);
-                    }
+                    lastMessage(reference, senderAppName, receiverAppName, sender, receiver, msgType, msg);
 
                     if (notify[0])
                     {
@@ -580,7 +575,7 @@ public class WebDocChat {
 
                                 Global.ChatUsersList.clear();
 
-                                String unreadMessageCounter, unreadMessageTimestamp, lastSentMessageTimestamp, lastMessage;
+                                String unreadMessageCounter, unreadMessageTimestamp, lastSentMessageTimestamp, lastMessageType, lastMessage;
 
                                 for (DataSnapshot snapshot : dataSnapshot.getChildren())
                                 {
@@ -616,10 +611,12 @@ public class WebDocChat {
 
                                     if(snapshot.child("LastMessage").hasChild(email))
                                     {
+                                        lastMessageType = snapshot.child("LastMessage").child(email).child("type").getValue().toString();
                                         lastMessage = snapshot.child("LastMessage").child(email).child("message").getValue().toString();
                                     }
                                     else
                                     {
+                                        lastMessageType = "no_type";
                                         lastMessage = "no_message";
                                     }
 
@@ -627,6 +624,7 @@ public class WebDocChat {
                                     user.setUnreadMessageTimestamp(unreadMessageTimestamp);
                                     user.setLastSentMessageTimestamp(lastSentMessageTimestamp);
                                     user.setLastMessage(lastMessage);
+                                    user.setLastMessageType(lastMessageType);
 
                                     for (int i = 0; i < Global.chatIDs.size(); i++)
                                     {
