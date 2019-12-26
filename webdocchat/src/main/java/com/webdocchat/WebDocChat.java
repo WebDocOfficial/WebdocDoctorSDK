@@ -586,7 +586,7 @@ public class WebDocChat {
 
                                     if(snapshot.child("LastSentMessage").hasChild(email))
                                     {
-                                        lastSentMessageTimestamp = (String) snapshot.child("LastSentMessage").child(email).child("timestamp").getValue();
+                                        lastSentMessageTimestamp = snapshot.child("LastSentMessage").child(email).child("timestamp").getValue().toString();
                                     }
                                     else
                                     {
