@@ -37,10 +37,14 @@ import com.webdocchat.NotificationManager.Token;
 import com.webdocchat.TimeAgo.TimeAgo;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -162,13 +166,77 @@ public class WebDocChat {
         });
     }
 
+    /* counter for unread messages */
+    public static void unreadMessagesCounter(FirebaseDatabase firebaseDatabase, String senderEmail, String receiverEmail)
+    {
+        final DatabaseReference reference = firebaseDatabase.getReference("Users")
+                .child(senderEmail).child("UnreadMessages").child(receiverEmail);
+
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                if(dataSnapshot.hasChild("unreadMessages"))
+                {
+                    String unreadMessages = (String) dataSnapshot.child("unreadMessages").getValue();
+                    //String dateTime = (String) dataSnapshot.child("dateTime").getValue();
+
+                    int noOfmsgs = Integer.parseInt(unreadMessages);
+                    noOfmsgs++;
+
+                    HashMap<String, Object> hashMap = new HashMap<String, Object>();
+                    hashMap.put("unreadMessages", String.valueOf(noOfmsgs));
+                    hashMap.put("dateTime", ServerValue.TIMESTAMP);
+
+                    reference.setValue(hashMap);
+                }
+                else
+                {
+                    HashMap<String, Object> hashMap = new HashMap<String, Object>();
+                    hashMap.put("unreadMessages", "1");
+                    hashMap.put("dateTime", ServerValue.TIMESTAMP);
+
+                    reference.setValue(hashMap);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public static void readMessagesCounter(FirebaseDatabase firebaseDatabase, final String senderEmail, final String receiverEmail)
+    {
+        final DatabaseReference reference = firebaseDatabase.getReference("Users")
+                .child(receiverEmail).child("UnreadMessages").child(senderEmail);
+
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                if(dataSnapshot.hasChild("unreadMessages"))
+                {
+                    HashMap<String, Object> hashMap = new HashMap<String, Object>();
+                    hashMap.put("unreadMessages", "0");
+
+                    FirebaseDatabase.getInstance().getReference("Users")
+                            .child(receiverEmail).child("UnreadMessages").child(senderEmail).updateChildren(hashMap);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     public static void changeStatus(Context ctx, String AppName, String UserId, String status)
     {
         FirebaseApp appReference = firebaseAppReference(ctx);
         final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
-
-        final WebdocChatInterface listener = (WebdocChatInterface) ctx;
-        final String[] response = {""};
 
         DatabaseReference dbReference = reference.getReference().child("Users").child(AppName).child(UserId.replace(".",""));
 
@@ -230,7 +298,17 @@ public class WebDocChat {
                     {
                         HashMap<String, Object> hashMap = new HashMap<String, Object>();
                         hashMap.put("MessageStatus", "seen");
-                        snapshot.getRef().updateChildren(hashMap);
+                        snapshot.getRef().updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+
+                                if (task.isSuccessful())
+                                {
+                                    readMessagesCounter(reference, personalEmail, chatUserEmail);
+                                }
+
+                            }
+                        });
                     }
                 }
             }
@@ -335,6 +413,9 @@ public class WebDocChat {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful())
                 {
+                    //lastMessageSent();
+                    unreadMessagesCounter(reference, sender, receiver);
+
                     if (notify[0])
                     {
                         sendNotification(context, reference, senderAppName, receiverAppName, sender, receiver, msg, msgType);
