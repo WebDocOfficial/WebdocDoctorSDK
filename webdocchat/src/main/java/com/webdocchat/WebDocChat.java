@@ -552,7 +552,7 @@ public class WebDocChat {
                                     if(snapshot.child("UnreadMessages").hasChild(email))
                                     {
                                         counter = (String) snapshot.child("UnreadMessages").child(email).child("counter").getValue();
-                                        timestamp = (String) snapshot.child("UnreadMessages").child(email).child("timestamp").getValue();
+                                        timestamp = snapshot.child("UnreadMessages").child(email).child("timestamp").getValue().toString();
 
                                     }
                                     else
