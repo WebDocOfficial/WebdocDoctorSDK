@@ -11,6 +11,8 @@ public class ChatUserModel {
     private String status;
     private String firebaseEmail;
     private String appName;
+    private String unreadMessageCounter;
+    private String unreadMessageTimestamp;
 
     public String getName() {
         return name;
@@ -51,4 +53,12 @@ public class ChatUserModel {
     public void setAppName(String appName) {
         this.appName = appName;
     }
+
+    public String getUnreadMessageCounter() { return unreadMessageCounter; }
+
+    public void setUnreadMessageCounter(String unreadMessageCounter) { this.unreadMessageCounter = unreadMessageCounter; }
+
+    public String getUnreadMessageTimestamp() { return unreadMessageTimestamp; }
+
+    public void setUnreadMessageTimestamp(String unreadMessageTimestamp) { this.unreadMessageTimestamp = unreadMessageTimestamp; }
 }
