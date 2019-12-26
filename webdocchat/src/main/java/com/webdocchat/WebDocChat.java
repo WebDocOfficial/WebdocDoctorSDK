@@ -167,6 +167,28 @@ public class WebDocChat {
         });
     }
 
+    public static void lastMessageSent(FirebaseDatabase firebaseDatabase, String receiverAppName, String senderEmail, String receiverEmail)
+    {
+        final DatabaseReference reference = firebaseDatabase.getReference("Users").child(receiverAppName)
+                .child(receiverEmail).child("LastSentMessage").child(senderEmail);
+
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                HashMap<String, Object> hashMap = new HashMap<String, Object>();
+                hashMap.put("timestamp", ServerValue.TIMESTAMP);
+
+                reference.setValue(hashMap);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     /* counter for unread messages */
     public static void unreadMessagesCounter(FirebaseDatabase firebaseDatabase, String appName, String senderEmail, String receiverEmail)
     {
@@ -414,7 +436,7 @@ public class WebDocChat {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful())
                 {
-                    //lastMessageSent();
+                    lastMessageSent(reference, receiverAppName, sender, receiver);
                     unreadMessagesCounter(reference, senderAppName, sender, receiver);
 
                     if (notify[0])
@@ -537,7 +559,7 @@ public class WebDocChat {
 
                                 Global.ChatUsersList.clear();
 
-                                String counter, timestamp;
+                                String unreadMessageCounter, unreadMessageTimestamp, lastSentMessageTimestamp;
 
                                 for (DataSnapshot snapshot : dataSnapshot.getChildren())
                                 {
@@ -551,35 +573,29 @@ public class WebDocChat {
 
                                     if(snapshot.child("UnreadMessages").hasChild(email))
                                     {
-                                        counter = (String) snapshot.child("UnreadMessages").child(email).child("counter").getValue();
-                                        timestamp = snapshot.child("UnreadMessages").child(email).child("timestamp").getValue().toString();
+                                        unreadMessageCounter = (String) snapshot.child("UnreadMessages").child(email).child("counter").getValue();
+                                        unreadMessageTimestamp = snapshot.child("UnreadMessages").child(email).child("timestamp").getValue().toString();
 
                                     }
                                     else
                                     {
                                         /* default if UnreadMessages is not present in db */
-                                        counter = "0";
-                                        timestamp = "1576839469870";
+                                        unreadMessageCounter = "0";
+                                        unreadMessageTimestamp = "1576839469870";
                                     }
 
-                                    user.setUnreadMessageCounter(counter);
-                                    user.setUnreadMessageTimestamp(timestamp);
-
-                                    /*if(snapshot.child("LastSentMessage").hasChild(firebaseUser.getUid()))
+                                    if(snapshot.child("LastSentMessage").hasChild(email))
                                     {
-                                        lastSentMessage = (String) snapshot.child("LastSentMessage").child(firebaseUser.getUid()).child("dateTime").getValue();
+                                        lastSentMessageTimestamp = (String) snapshot.child("LastSentMessage").child(email).child("timestamp").getValue();
                                     }
                                     else
                                     {
-                                        lastSentMessage = "04-Sep-1999 03:11:54 PM";
-                                    }*/
+                                        lastSentMessageTimestamp = "1576839469870";
+                                    }
 
-                                    /*User user = new User(userID, userName, imageURL, userStatus, userDateTime, unreadMessages, unreadMessagesdateTime, lastSentMessage);
-
-                                    if(!user.getId().equals(firebaseUser.getUid()))
-                                    {
-                                        ListUsers.add(user);
-                                    }*/
+                                    user.setUnreadMessageCounter(unreadMessageCounter);
+                                    user.setUnreadMessageTimestamp(unreadMessageTimestamp);
+                                    user.setLastSentMessageTimestamp(lastSentMessageTimestamp);
 
                                     for (int i = 0; i < Global.chatIDs.size(); i++)
                                     {
@@ -596,23 +612,23 @@ public class WebDocChat {
                                                 }
                                             });
 
-                                            /*Collections.sort(Global.ChatUsersList, new Comparator<ChatUserModel>() {
+                                            Collections.sort(Global.ChatUsersList, new Comparator<ChatUserModel>() {
                                                 @Override
                                                 public int compare(ChatUserModel user1, ChatUserModel user2) {
-                                                    if (user1.getLastMessageSent() == null || user2.getLastMessageSent() == null)
+                                                    if (user1.getLastSentMessageTimestamp() == null || user2.getLastSentMessageTimestamp() == null)
                                                         return 0;
-                                                    return user2.getLastMessageSent().compareTo(user1.getLastMessageSent());
+                                                    return user2.getLastSentMessageTimestamp().compareTo(user1.getLastSentMessageTimestamp());
                                                 }
                                             });
 
-                                            Collections.sort(ListUsers, new Comparator<User>() {
+                                            Collections.sort(Global.ChatUsersList, new Comparator<ChatUserModel>() {
                                                 @Override
-                                                public int compare(User user1, User user2) {
-                                                    if (user1.getUnreadMessagedateTime() == null || user2.getLastMessageSent() == null)
+                                                public int compare(ChatUserModel user1, ChatUserModel user2) {
+                                                    if (user1.getUnreadMessageTimestamp() == null || user2.getLastSentMessageTimestamp() == null)
                                                         return 0;
-                                                    return user2.getLastMessageSent().compareTo(user1.getUnreadMessagedateTime());
+                                                    return user2.getLastSentMessageTimestamp().compareTo(user1.getUnreadMessageTimestamp());
                                                 }
-                                            });*/
+                                            });
 
                                             vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
                                         }
