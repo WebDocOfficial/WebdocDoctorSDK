@@ -176,25 +176,25 @@ public class WebDocChat {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot)
             {
-                if(dataSnapshot.hasChild("unreadMessages"))
+                if(dataSnapshot.hasChild("counter"))
                 {
-                    String unreadMessages = (String) dataSnapshot.child("unreadMessages").getValue();
+                    String unreadMessages = (String) dataSnapshot.child("counter").getValue();
                     //String dateTime = (String) dataSnapshot.child("dateTime").getValue();
 
                     int noOfmsgs = Integer.parseInt(unreadMessages);
                     noOfmsgs++;
 
                     HashMap<String, Object> hashMap = new HashMap<String, Object>();
-                    hashMap.put("unreadMessages", String.valueOf(noOfmsgs));
-                    hashMap.put("dateTime", ServerValue.TIMESTAMP);
+                    hashMap.put("counter", String.valueOf(noOfmsgs));
+                    hashMap.put("timestamp", ServerValue.TIMESTAMP);
 
                     reference.setValue(hashMap);
                 }
                 else
                 {
                     HashMap<String, Object> hashMap = new HashMap<String, Object>();
-                    hashMap.put("unreadMessages", "1");
-                    hashMap.put("dateTime", ServerValue.TIMESTAMP);
+                    hashMap.put("counter", "1");
+                    hashMap.put("timestamp", ServerValue.TIMESTAMP);
 
                     reference.setValue(hashMap);
                 }
@@ -216,10 +216,10 @@ public class WebDocChat {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot)
             {
-                if(dataSnapshot.hasChild("unreadMessages"))
+                if(dataSnapshot.hasChild("counter"))
                 {
                     HashMap<String, Object> hashMap = new HashMap<String, Object>();
-                    hashMap.put("unreadMessages", "0");
+                    hashMap.put("counter", "0");
 
                     FirebaseDatabase.getInstance().getReference("Users")
                             .child(receiverEmail).child("UnreadMessages").child(senderEmail).updateChildren(hashMap);
