@@ -452,7 +452,13 @@ public class WebDocChat {
 
                     unreadMessagesCounter(reference, senderAppName, sender, receiver);
 
-                    lastMessage(reference, senderAppName, receiverAppName, sender, receiver, msg);
+                    if(msgType.equalsIgnoreCase("image"))
+                    {
+                        lastMessage(reference, senderAppName, receiverAppName, sender, receiver, "Photo");
+                    }
+                    else {
+                        lastMessage(reference, senderAppName, receiverAppName, sender, receiver, msg);
+                    }
 
                     if (notify[0])
                     {
