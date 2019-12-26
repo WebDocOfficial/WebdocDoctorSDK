@@ -167,7 +167,19 @@ public class WebDocChat {
         });
     }
 
-    public static void lastMessageSent(FirebaseDatabase firebaseDatabase, String receiverAppName, String senderEmail, String receiverEmail)
+    private static void lastMessage(FirebaseDatabase firebaseDatabase, String senderAppName, String receiverAppName, String senderEmail, String receiverEmail, String message)
+    {
+        DatabaseReference reference = firebaseDatabase.getReference("Users");
+
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("message", message);
+
+        reference.child(senderAppName).child(senderEmail).child("LastMessage").setValue(hashMap);
+
+        reference.child(receiverAppName).child(receiverAppName).child("LastMessage").setValue(hashMap);
+    }
+
+    private static void lastMessageSent(FirebaseDatabase firebaseDatabase, String receiverAppName, String senderEmail, String receiverEmail)
     {
         final DatabaseReference reference = firebaseDatabase.getReference("Users").child(receiverAppName)
                 .child(receiverEmail).child("LastSentMessage").child(senderEmail);
@@ -190,7 +202,7 @@ public class WebDocChat {
     }
 
     /* counter for unread messages */
-    public static void unreadMessagesCounter(FirebaseDatabase firebaseDatabase, String appName, String senderEmail, String receiverEmail)
+    private static void unreadMessagesCounter(FirebaseDatabase firebaseDatabase, String appName, String senderEmail, String receiverEmail)
     {
         final DatabaseReference reference = firebaseDatabase.getReference("Users").child(appName)
                 .child(senderEmail).child("UnreadMessages").child(receiverEmail);
@@ -230,7 +242,7 @@ public class WebDocChat {
         });
     }
 
-    public static void readMessagesCounter(final FirebaseDatabase firebaseDatabase, final String receiverAppName, final String senderEmail, final String receiverEmail)
+    private static void readMessagesCounter(final FirebaseDatabase firebaseDatabase, final String receiverAppName, final String senderEmail, final String receiverEmail)
     {
         final DatabaseReference reference = firebaseDatabase.getReference("Users").child(receiverAppName)
                 .child(receiverEmail).child("UnreadMessages").child(senderEmail);
@@ -437,7 +449,16 @@ public class WebDocChat {
                 if (task.isSuccessful())
                 {
                     lastMessageSent(reference, receiverAppName, sender, receiver);
+
                     unreadMessagesCounter(reference, senderAppName, sender, receiver);
+
+                    if(msgType.equalsIgnoreCase("image"))
+                    {
+                        lastMessage(reference, senderAppName, receiverAppName, sender, receiver, "Photo");
+                    }
+                    else {
+                        lastMessage(reference, senderAppName, receiverAppName, sender, receiver, msg);
+                    }
 
                     if (notify[0])
                     {
