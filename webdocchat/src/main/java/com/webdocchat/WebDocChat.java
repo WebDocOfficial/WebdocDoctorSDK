@@ -174,9 +174,9 @@ public class WebDocChat {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("message", message);
 
-        reference.child(senderAppName).child(senderEmail).child("LastMessage").setValue(hashMap);
+        reference.child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).setValue(hashMap);
 
-        reference.child(receiverAppName).child(receiverAppName).child("LastMessage").setValue(hashMap);
+        reference.child(receiverAppName).child(receiverAppName).child("LastMessage").child(senderEmail).setValue(hashMap);
     }
 
     private static void lastMessageSent(FirebaseDatabase firebaseDatabase, String receiverAppName, String senderEmail, String receiverEmail)
@@ -580,7 +580,7 @@ public class WebDocChat {
 
                                 Global.ChatUsersList.clear();
 
-                                String unreadMessageCounter, unreadMessageTimestamp, lastSentMessageTimestamp;
+                                String unreadMessageCounter, unreadMessageTimestamp, lastSentMessageTimestamp, lastMessage;
 
                                 for (DataSnapshot snapshot : dataSnapshot.getChildren())
                                 {
@@ -614,9 +614,19 @@ public class WebDocChat {
                                         lastSentMessageTimestamp = "1576839469870";
                                     }
 
+                                    if(snapshot.child("LastMessage").hasChild(email))
+                                    {
+                                        lastMessage = snapshot.child("LastMessage").child(email).child("message").getValue().toString();
+                                    }
+                                    else
+                                    {
+                                        lastMessage = "no_message";
+                                    }
+
                                     user.setUnreadMessageCounter(unreadMessageCounter);
                                     user.setUnreadMessageTimestamp(unreadMessageTimestamp);
                                     user.setLastSentMessageTimestamp(lastSentMessageTimestamp);
+                                    user.setLastMessage(lastMessage);
 
                                     for (int i = 0; i < Global.chatIDs.size(); i++)
                                     {

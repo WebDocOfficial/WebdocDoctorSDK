@@ -14,6 +14,7 @@ public class ChatUserModel {
     private String unreadMessageCounter;
     private String unreadMessageTimestamp;
     private String lastSentMessageTimestamp;
+    private String lastMessage;
 
     public String getName() {
         return name;
@@ -66,4 +67,8 @@ public class ChatUserModel {
     public String getLastSentMessageTimestamp() { return lastSentMessageTimestamp; }
 
     public void setLastSentMessageTimestamp(String lastSentMessageTimestamp) { this.lastSentMessageTimestamp = lastSentMessageTimestamp; }
+
+    public String getLastMessage() { return lastMessage; }
+
+    public void setLastMessage(String lastMessage) { this.lastMessage = lastMessage; }
 }
