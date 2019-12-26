@@ -167,9 +167,9 @@ public class WebDocChat {
     }
 
     /* counter for unread messages */
-    public static void unreadMessagesCounter(FirebaseDatabase firebaseDatabase, String senderEmail, String receiverEmail)
+    public static void unreadMessagesCounter(FirebaseDatabase firebaseDatabase, String appName, String senderEmail, String receiverEmail)
     {
-        final DatabaseReference reference = firebaseDatabase.getReference("Users")
+        final DatabaseReference reference = firebaseDatabase.getReference("Users").child(appName)
                 .child(senderEmail).child("UnreadMessages").child(receiverEmail);
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -207,9 +207,9 @@ public class WebDocChat {
         });
     }
 
-    public static void readMessagesCounter(FirebaseDatabase firebaseDatabase, final String senderEmail, final String receiverEmail)
+    public static void readMessagesCounter(FirebaseDatabase firebaseDatabase, String receiverAppName, final String senderEmail, final String receiverEmail)
     {
-        final DatabaseReference reference = firebaseDatabase.getReference("Users")
+        final DatabaseReference reference = firebaseDatabase.getReference("Users").child(receiverAppName)
                 .child(receiverEmail).child("UnreadMessages").child(senderEmail);
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -274,7 +274,7 @@ public class WebDocChat {
         Global.seenReference.removeEventListener(Global.seenListener);
     }
 
-    public static void seenStatus(Context context, String AppName, final String personalEmail, final String chatUserEmail) {
+    public static void seenStatus(Context context, String AppName, final String personalEmail, final String chatUserEmail, final String receiverAppName) {
 
         FirebaseApp appReference = firebaseAppReference(context);
         final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
@@ -304,7 +304,7 @@ public class WebDocChat {
 
                                 if (task.isSuccessful())
                                 {
-                                    readMessagesCounter(reference, personalEmail, chatUserEmail);
+                                    readMessagesCounter(reference, receiverAppName, personalEmail, chatUserEmail);
                                 }
 
                             }
@@ -414,7 +414,7 @@ public class WebDocChat {
                 if (task.isSuccessful())
                 {
                     //lastMessageSent();
-                    unreadMessagesCounter(reference, sender, receiver);
+                    unreadMessagesCounter(reference, senderAppName, sender, receiver);
 
                     if (notify[0])
                     {
