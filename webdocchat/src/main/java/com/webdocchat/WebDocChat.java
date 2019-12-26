@@ -208,7 +208,7 @@ public class WebDocChat {
         });
     }
 
-    public static void readMessagesCounter(FirebaseDatabase firebaseDatabase, String receiverAppName, final String senderEmail, final String receiverEmail)
+    public static void readMessagesCounter(final FirebaseDatabase firebaseDatabase, final String receiverAppName, final String senderEmail, final String receiverEmail)
     {
         final DatabaseReference reference = firebaseDatabase.getReference("Users").child(receiverAppName)
                 .child(receiverEmail).child("UnreadMessages").child(senderEmail);
@@ -222,7 +222,7 @@ public class WebDocChat {
                     HashMap<String, Object> hashMap = new HashMap<String, Object>();
                     hashMap.put("counter", "0");
 
-                    FirebaseDatabase.getInstance().getReference("Users")
+                    firebaseDatabase.getReference("Users").child(receiverAppName)
                             .child(receiverEmail).child("UnreadMessages").child(senderEmail).updateChildren(hashMap);
                 }
             }
