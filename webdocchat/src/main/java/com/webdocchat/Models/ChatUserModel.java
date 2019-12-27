@@ -12,10 +12,10 @@ public class ChatUserModel {
     private String firebaseEmail;
     private String appName;
     private String unreadMessageCounter;
-    private String unreadMessageTimestamp;
-    private String lastSentMessageTimestamp;
     private String lastMessage;
+    private String lastMessageTimestamp;
     private String lastMessageType;
+    private String lastMessageSender;
 
     public String getName() {
         return name;
@@ -61,14 +61,6 @@ public class ChatUserModel {
 
     public void setUnreadMessageCounter(String unreadMessageCounter) { this.unreadMessageCounter = unreadMessageCounter; }
 
-    public String getUnreadMessageTimestamp() { return unreadMessageTimestamp; }
-
-    public void setUnreadMessageTimestamp(String unreadMessageTimestamp) { this.unreadMessageTimestamp = unreadMessageTimestamp; }
-
-    public String getLastSentMessageTimestamp() { return lastSentMessageTimestamp; }
-
-    public void setLastSentMessageTimestamp(String lastSentMessageTimestamp) { this.lastSentMessageTimestamp = lastSentMessageTimestamp; }
-
     public String getLastMessage() { return lastMessage; }
 
     public void setLastMessage(String lastMessage) { this.lastMessage = lastMessage; }
@@ -76,4 +68,12 @@ public class ChatUserModel {
     public String getLastMessageType() { return lastMessageType; }
 
     public void setLastMessageType(String lastMessageType) { this.lastMessageType = lastMessageType; }
+
+    public String getLastMessageTimestamp() { return lastMessageTimestamp; }
+
+    public void setLastMessageTimestamp(String lastMessageTimestamp) { this.lastMessageTimestamp = lastMessageTimestamp; }
+
+    public String getLastMessageSender() { return lastMessageSender; }
+
+    public void setLastMessageSender(String lastMessageSender) { this.lastMessageSender = lastMessageSender; }
 }
