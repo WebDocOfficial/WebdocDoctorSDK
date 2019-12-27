@@ -322,22 +322,8 @@ public class WebDocChat {
                                     readMessagesCounter(reference, receiverAppName, personalEmail, chatUserEmail);
 
                                     /* For last message sent and seen status */
-                                    reference.getReference().child("Users").child("PTCLHealth").child(chatUserEmail).addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                                                if(dataSnapshot.child("LastMessage").hasChild(personalEmail))
-                                                {
-                                                    reference.getReference("Users").child(senderAppName).child(personalEmail).child("LastMessage").child(chatUserEmail).updateChildren(hashMap);
-                                                    reference.getReference("Users").child(receiverAppName).child(chatUserEmail).child("LastMessage").child(personalEmail).updateChildren(hashMap);
-                                                }
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                        }
-                                    });
+                                    reference.getReference("Users").child(senderAppName).child(personalEmail).child("LastMessage").child(chatUserEmail).updateChildren(hashMap);
+                                    reference.getReference("Users").child(receiverAppName).child(chatUserEmail).child("LastMessage").child(personalEmail).updateChildren(hashMap);
                                 }
 
                             }
