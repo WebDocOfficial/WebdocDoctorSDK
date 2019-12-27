@@ -183,6 +183,18 @@ public class WebDocChat {
         reference.child(receiverAppName).child(receiverEmail).child("LastMessage").child(senderEmail).setValue(hashMap);
     }
 
+    public static void lastMessageSeenStatus(FirebaseDatabase firebaseDatabase, String senderAppName, String receiverAppName, String senderEmail, String receiverEmail)
+    {
+        DatabaseReference reference = firebaseDatabase.getReference();
+
+        HashMap<String, Object> hashMap = new HashMap<String, Object>();
+        hashMap.put("MessageStatus", "seen");
+
+        /* For last message sent and seen status */
+        reference.child("Users").child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).updateChildren(hashMap);
+        reference.child("Users").child(receiverAppName).child(receiverEmail).child("LastMessage").child(senderEmail).updateChildren(hashMap);
+    }
+
 
     /* counter for unread messages */
     private static void unreadMessagesCounter(FirebaseDatabase firebaseDatabase, String appName, String senderEmail, String receiverEmail)
@@ -320,10 +332,6 @@ public class WebDocChat {
                                 if (task.isSuccessful())
                                 {
                                     readMessagesCounter(reference, receiverAppName, personalEmail, chatUserEmail);
-
-                                    /* For last message sent and seen status */
-                                    //reference.getReference("Users").child(senderAppName).child(personalEmail).child("LastMessage").child(chatUserEmail).updateChildren(hashMap);
-                                    //reference.getReference("Users").child(receiverAppName).child(chatUserEmail).child("LastMessage").child(personalEmail).updateChildren(hashMap);
                                 }
 
                             }
