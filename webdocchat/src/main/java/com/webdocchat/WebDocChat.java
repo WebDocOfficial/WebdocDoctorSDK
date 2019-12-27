@@ -194,16 +194,19 @@ public class WebDocChat {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot)
             {
-                String receiver = dataSnapshot.child("receiver").getValue().toString();
-
-                if (receiver.equalsIgnoreCase(senderEmail))
+                for (DataSnapshot snapshot : dataSnapshot.getChildren())
                 {
-                    final HashMap<String, Object> hashMap = new HashMap<String, Object>();
-                    hashMap.put("MessageStatus", "seen");
+                    String receiver = snapshot.child("receiver").getValue().toString();
+
+                    if (receiver.equalsIgnoreCase(senderEmail))
+                    {
+                        final HashMap<String, Object> hashMap = new HashMap<String, Object>();
+                        hashMap.put("MessageStatus", "seen");
 
                     /* For last message sent and seen status */
-                    reference.getReference().child("Users").child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).updateChildren(hashMap);
-                    reference.getReference().child("Users").child(receiverAppName).child(receiverEmail).child("LastMessage").child(senderEmail).updateChildren(hashMap);
+                        reference.getReference().child("Users").child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).updateChildren(hashMap);
+                        reference.getReference().child("Users").child(receiverAppName).child(receiverEmail).child("LastMessage").child(senderEmail).updateChildren(hashMap);
+                    }
                 }
             }
 
