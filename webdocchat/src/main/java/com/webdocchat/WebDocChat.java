@@ -322,8 +322,8 @@ public class WebDocChat {
                                     readMessagesCounter(reference, receiverAppName, personalEmail, chatUserEmail);
 
                                     /* For last message sent and seen status */
-                                    reference.getReference("Users").child(senderAppName).child(personalEmail).child("LastMessage").child(chatUserEmail).updateChildren(hashMap);
-                                    reference.getReference("Users").child(receiverAppName).child(chatUserEmail).child("LastMessage").child(personalEmail).updateChildren(hashMap);
+                                    //reference.getReference("Users").child(senderAppName).child(personalEmail).child("LastMessage").child(chatUserEmail).updateChildren(hashMap);
+                                    //reference.getReference("Users").child(receiverAppName).child(chatUserEmail).child("LastMessage").child(personalEmail).updateChildren(hashMap);
                                 }
 
                             }
