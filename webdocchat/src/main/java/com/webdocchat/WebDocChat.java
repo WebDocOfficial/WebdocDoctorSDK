@@ -194,7 +194,7 @@ public class WebDocChat {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot)
             {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren())
+                if(dataSnapshot.hasChild("receiver"))
                 {
                     String receiver = snapshot.child("receiver").getValue().toString();
 
@@ -207,7 +207,9 @@ public class WebDocChat {
                         reference.getReference().child("Users").child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).updateChildren(hashMap);
                         reference.getReference().child("Users").child(receiverAppName).child(receiverEmail).child("LastMessage").child(senderEmail).updateChildren(hashMap);
                     }
+
                 }
+
             }
 
             @Override
