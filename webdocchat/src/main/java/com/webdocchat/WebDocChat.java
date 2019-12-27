@@ -182,27 +182,6 @@ public class WebDocChat {
         reference.child(receiverAppName).child(receiverEmail).child("LastMessage").child(senderEmail).setValue(hashMap);
     }
 
-    /*private static void lastMessageSent(FirebaseDatabase firebaseDatabase, String receiverAppName, String senderEmail, String receiverEmail)
-    {
-        final DatabaseReference reference = firebaseDatabase.getReference("Users").child(receiverAppName)
-                .child(receiverEmail).child("LastSentMessage").child(senderEmail);
-
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-            {
-                HashMap<String, Object> hashMap = new HashMap<String, Object>();
-                hashMap.put("timestamp", ServerValue.TIMESTAMP);
-
-                reference.setValue(hashMap);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }*/
 
     /* counter for unread messages */
     private static void unreadMessagesCounter(FirebaseDatabase firebaseDatabase, String appName, String senderEmail, String receiverEmail)
@@ -217,14 +196,12 @@ public class WebDocChat {
                 if(dataSnapshot.hasChild("counter"))
                 {
                     String unreadMessages = (String) dataSnapshot.child("counter").getValue();
-                    //String dateTime = (String) dataSnapshot.child("dateTime").getValue();
 
                     int noOfmsgs = Integer.parseInt(unreadMessages);
                     noOfmsgs++;
 
                     HashMap<String, Object> hashMap = new HashMap<String, Object>();
                     hashMap.put("counter", String.valueOf(noOfmsgs));
-                    //hashMap.put("timestamp", ServerValue.TIMESTAMP);
 
                     reference.setValue(hashMap);
                 }
@@ -232,7 +209,6 @@ public class WebDocChat {
                 {
                     HashMap<String, Object> hashMap = new HashMap<String, Object>();
                     hashMap.put("counter", "1");
-                    //hashMap.put("timestamp", ServerValue.TIMESTAMP);
 
                     reference.setValue(hashMap);
                 }
@@ -451,8 +427,6 @@ public class WebDocChat {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful())
                 {
-                    //lastMessageSent(reference, receiverAppName, sender, receiver);
-
                     unreadMessagesCounter(reference, senderAppName, sender, receiver);
 
                     lastMessage(reference, senderAppName, receiverAppName, sender, receiver, msgType, msg);
@@ -592,24 +566,12 @@ public class WebDocChat {
                                     if(snapshot.child("UnreadMessages").hasChild(email))
                                     {
                                         unreadMessageCounter = (String) snapshot.child("UnreadMessages").child(email).child("counter").getValue();
-                                        //unreadMessageTimestamp = snapshot.child("UnreadMessages").child(email).child("timestamp").getValue().toString();
-
                                     }
                                     else
                                     {
                                         /* default if UnreadMessages is not present in db */
                                         unreadMessageCounter = "0";
-                                        //unreadMessageTimestamp = "1576839469870";
                                     }
-
-                                    /*if(snapshot.child("LastSentMessage").hasChild(email))
-                                    {
-                                        lastSentMessageTimestamp = snapshot.child("LastSentMessage").child(email).child("timestamp").getValue().toString();
-                                    }
-                                    else
-                                    {
-                                        lastSentMessageTimestamp = "1576839469870";
-                                    }*/
 
                                     if(snapshot.child("LastMessage").hasChild(email))
                                     {
@@ -627,8 +589,6 @@ public class WebDocChat {
                                     }
 
                                     user.setUnreadMessageCounter(unreadMessageCounter);
-                                    //user.setUnreadMessageTimestamp(unreadMessageTimestamp);
-                                    //user.setLastSentMessageTimestamp(lastSentMessageTimestamp);
                                     user.setLastMessage(lastMessage);
                                     user.setLastMessageType(lastMessageType);
                                     user.setLastMessageTimestamp(lastMessageTimestamp);
@@ -648,24 +608,6 @@ public class WebDocChat {
                                                     return user2.getLastMessageTimestamp().compareTo(user1.getLastMessageTimestamp());
                                                 }
                                             });
-
-                                            /*Collections.sort(Global.ChatUsersList, new Comparator<ChatUserModel>() {
-                                                @Override
-                                                public int compare(ChatUserModel user1, ChatUserModel user2) {
-                                                    if (user1.getLastSentMessageTimestamp() == null || user2.getLastSentMessageTimestamp() == null)
-                                                        return 0;
-                                                    return user2.getLastSentMessageTimestamp().compareTo(user1.getLastSentMessageTimestamp());
-                                                }
-                                            });
-
-                                            Collections.sort(Global.ChatUsersList, new Comparator<ChatUserModel>() {
-                                                @Override
-                                                public int compare(ChatUserModel user1, ChatUserModel user2) {
-                                                    if (user1.getUnreadMessageTimestamp() == null || user2.getLastSentMessageTimestamp() == null)
-                                                        return 0;
-                                                    return user2.getLastSentMessageTimestamp().compareTo(user1.getUnreadMessageTimestamp());
-                                                }
-                                            });*/
 
                                             vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
                                         }
