@@ -176,6 +176,7 @@ public class WebDocChat {
         hashMap.put("type", messageType);
         hashMap.put("timestamp", ServerValue.TIMESTAMP);
         hashMap.put("sender", senderEmail);
+        hashMap.put("receiver", receiverEmail);
         hashMap.put("MessageStatus", "sent");
 
         reference.child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).setValue(hashMap);
@@ -183,16 +184,32 @@ public class WebDocChat {
         reference.child(receiverAppName).child(receiverEmail).child("LastMessage").child(senderEmail).setValue(hashMap);
     }
 
-    public static void lastMessageSeenStatus(FirebaseDatabase firebaseDatabase, String senderAppName, String receiverAppName, String senderEmail, String receiverEmail)
+    public static void lastMessageSeenStatus(FirebaseDatabase firebaseDatabase, final String senderAppName, final String receiverAppName, final String senderEmail, final String receiverEmail)
     {
-        DatabaseReference reference = firebaseDatabase.getReference();
+        final DatabaseReference reference = firebaseDatabase.getReference();
 
-        HashMap<String, Object> hashMap = new HashMap<String, Object>();
-        hashMap.put("MessageStatus", "seen");
+        reference.child("Users").child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                String receiver = dataSnapshot.child("receiver").getValue().toString();
 
-        /* For last message sent and seen status */
-        reference.child("Users").child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).updateChildren(hashMap);
-        reference.child("Users").child(receiverAppName).child(receiverEmail).child("LastMessage").child(senderEmail).updateChildren(hashMap);
+                if (receiver.equalsIgnoreCase(senderEmail))
+                {
+                    final HashMap<String, Object> hashMap = new HashMap<String, Object>();
+                    hashMap.put("MessageStatus", "seen");
+
+                    /* For last message sent and seen status */
+                    reference.child("Users").child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).updateChildren(hashMap);
+                    reference.child("Users").child(receiverAppName).child(receiverEmail).child("LastMessage").child(senderEmail).updateChildren(hashMap);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 
@@ -564,7 +581,7 @@ public class WebDocChat {
 
                                 Global.ChatUsersList.clear();
 
-                                String unreadMessageCounter, lastMessageTimestamp, lastMessageType, lastMessage, lastMessageSender, lastMessageStatus;
+                                String unreadMessageCounter, lastMessageTimestamp, lastMessageType, lastMessage, lastMessageSender, lastMessageReceiver, lastMessageStatus;
 
                                 for (DataSnapshot snapshot : dataSnapshot.getChildren())
                                 {
@@ -592,6 +609,7 @@ public class WebDocChat {
                                         lastMessage = snapshot.child("LastMessage").child(email).child("message").getValue().toString();
                                         lastMessageTimestamp = snapshot.child("LastMessage").child(email).child("timestamp").getValue().toString();
                                         lastMessageSender = snapshot.child("LastMessage").child(email).child("sender").getValue().toString();
+                                        lastMessageReceiver = snapshot.child("LastMessage").child(email).child("receiver").getValue().toString();
                                         lastMessageStatus = snapshot.child("LastMessage").child(email).child("MessageStatus").getValue().toString();
                                     }
                                     else
@@ -600,6 +618,7 @@ public class WebDocChat {
                                         lastMessage = "no_message";
                                         lastMessageTimestamp = "1576839469870";
                                         lastMessageSender = "no_sender";
+                                        lastMessageReceiver = "no_receiver";
                                         lastMessageStatus = "no_status";
                                     }
 
@@ -608,6 +627,7 @@ public class WebDocChat {
                                     user.setLastMessageType(lastMessageType);
                                     user.setLastMessageTimestamp(lastMessageTimestamp);
                                     user.setLastMessageSender(lastMessageSender);
+                                    user.setLastMessageReceiver(lastMessageReceiver);
                                     user.setLastMessageStatus(lastMessageStatus);
 
                                     for (int i = 0; i < Global.chatIDs.size(); i++)
