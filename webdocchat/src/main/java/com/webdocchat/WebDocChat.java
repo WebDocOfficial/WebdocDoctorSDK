@@ -196,7 +196,7 @@ public class WebDocChat {
             {
                 if(dataSnapshot.hasChild("receiver"))
                 {
-                    String receiver = snapshot.child("receiver").getValue().toString();
+                    String receiver = dataSnapshot.child("receiver").getValue().toString();
 
                     if (receiver.equalsIgnoreCase(senderEmail))
                     {
