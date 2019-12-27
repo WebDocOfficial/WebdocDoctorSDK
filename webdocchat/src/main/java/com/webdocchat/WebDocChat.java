@@ -184,11 +184,12 @@ public class WebDocChat {
         reference.child(receiverAppName).child(receiverEmail).child("LastMessage").child(senderEmail).setValue(hashMap);
     }
 
-    public static void lastMessageSeenStatus(FirebaseDatabase firebaseDatabase, final String senderAppName, final String receiverAppName, final String senderEmail, final String receiverEmail)
+    public static void lastMessageSeenStatus(Context context, final String senderAppName, final String receiverAppName, final String senderEmail, final String receiverEmail)
     {
-        final DatabaseReference reference = firebaseDatabase.getReference();
+        FirebaseApp appReference = firebaseAppReference(context);
+        final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
 
-        Global.lastMessageSeenReference = reference.child("Users").child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail);
+        Global.lastMessageSeenReference = reference.getReference().child("Users").child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail);
         Global.lastMessageSeenListener = Global.lastMessageSeenReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot)
@@ -201,8 +202,8 @@ public class WebDocChat {
                     hashMap.put("MessageStatus", "seen");
 
                     /* For last message sent and seen status */
-                    reference.child("Users").child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).updateChildren(hashMap);
-                    reference.child("Users").child(receiverAppName).child(receiverEmail).child("LastMessage").child(senderEmail).updateChildren(hashMap);
+                    reference.getReference().child("Users").child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).updateChildren(hashMap);
+                    reference.getReference().child("Users").child(receiverAppName).child(receiverEmail).child("LastMessage").child(senderEmail).updateChildren(hashMap);
                 }
             }
 
