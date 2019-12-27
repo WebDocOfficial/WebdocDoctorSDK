@@ -176,6 +176,7 @@ public class WebDocChat {
         hashMap.put("type", messageType);
         hashMap.put("timestamp", ServerValue.TIMESTAMP);
         hashMap.put("sender", senderEmail);
+        hashMap.put("status", "sent");
 
         reference.child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).setValue(hashMap);
 
@@ -551,7 +552,7 @@ public class WebDocChat {
 
                                 Global.ChatUsersList.clear();
 
-                                String unreadMessageCounter, lastMessageTimestamp, lastMessageType, lastMessage, lastMessageSender;
+                                String unreadMessageCounter, lastMessageTimestamp, lastMessageType, lastMessage, lastMessageSender, lastMessageStatus;
 
                                 for (DataSnapshot snapshot : dataSnapshot.getChildren())
                                 {
@@ -579,6 +580,7 @@ public class WebDocChat {
                                         lastMessage = snapshot.child("LastMessage").child(email).child("message").getValue().toString();
                                         lastMessageTimestamp = snapshot.child("LastMessage").child(email).child("timestamp").getValue().toString();
                                         lastMessageSender = snapshot.child("LastMessage").child(email).child("sender").getValue().toString();
+                                        lastMessageStatus = snapshot.child("LastMessage").child(email).child("status").getValue().toString();
                                     }
                                     else
                                     {
@@ -586,6 +588,7 @@ public class WebDocChat {
                                         lastMessage = "no_message";
                                         lastMessageTimestamp = "1576839469870";
                                         lastMessageSender = "no_sender";
+                                        lastMessageStatus = "no_status";
                                     }
 
                                     user.setUnreadMessageCounter(unreadMessageCounter);
@@ -593,6 +596,7 @@ public class WebDocChat {
                                     user.setLastMessageType(lastMessageType);
                                     user.setLastMessageTimestamp(lastMessageTimestamp);
                                     user.setLastMessageSender(lastMessageSender);
+                                    user.setLastMessageStatus(lastMessageStatus);
 
                                     for (int i = 0; i < Global.chatIDs.size(); i++)
                                     {
