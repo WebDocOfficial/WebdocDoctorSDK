@@ -232,7 +232,7 @@ public class WebDocChat {
                 {
                     HashMap<String, Object> hashMap = new HashMap<String, Object>();
                     hashMap.put("counter", "1");
-                    hashMap.put("timestamp", ServerValue.TIMESTAMP);
+                    //hashMap.put("timestamp", ServerValue.TIMESTAMP);
 
                     reference.setValue(hashMap);
                 }
