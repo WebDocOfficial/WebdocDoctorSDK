@@ -176,7 +176,7 @@ public class WebDocChat {
         hashMap.put("type", messageType);
         hashMap.put("timestamp", ServerValue.TIMESTAMP);
         hashMap.put("sender", senderEmail);
-        hashMap.put("status", "sent");
+        hashMap.put("MessageStatus", "sent");
 
         reference.child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).setValue(hashMap);
 
@@ -289,7 +289,7 @@ public class WebDocChat {
         Global.seenReference.removeEventListener(Global.seenListener);
     }
 
-    public static void seenStatus(Context context, String AppName, final String personalEmail, final String chatUserEmail, final String receiverAppName) {
+    public static void seenStatus(Context context, String AppName, final String personalEmail, final String chatUserEmail, final String senderAppName, final String receiverAppName) {
 
         FirebaseApp appReference = firebaseAppReference(context);
         final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
@@ -305,13 +305,13 @@ public class WebDocChat {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot)
             {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren())
+                for (final DataSnapshot snapshot : dataSnapshot.getChildren())
                 {
                     MessageDataModel messages = snapshot.getValue(MessageDataModel.class);
 
                     if (messages.getReceiver().equals(personalEmail) && messages.getSender().equals(chatUserEmail))
                     {
-                        HashMap<String, Object> hashMap = new HashMap<String, Object>();
+                        final HashMap<String, Object> hashMap = new HashMap<String, Object>();
                         hashMap.put("MessageStatus", "seen");
                         snapshot.getRef().updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
@@ -320,6 +320,10 @@ public class WebDocChat {
                                 if (task.isSuccessful())
                                 {
                                     readMessagesCounter(reference, receiverAppName, personalEmail, chatUserEmail);
+
+                                    /* For last message sent and seen status */
+                                    reference.getReference("Users").child(senderAppName).child(personalEmail).child("LastMessage").child(chatUserEmail).setValue(hashMap);
+                                    reference.getReference("Users").child(receiverAppName).child(chatUserEmail).child("LastMessage").child(personalEmail).setValue(hashMap);
                                 }
 
                             }
@@ -580,7 +584,7 @@ public class WebDocChat {
                                         lastMessage = snapshot.child("LastMessage").child(email).child("message").getValue().toString();
                                         lastMessageTimestamp = snapshot.child("LastMessage").child(email).child("timestamp").getValue().toString();
                                         lastMessageSender = snapshot.child("LastMessage").child(email).child("sender").getValue().toString();
-                                        lastMessageStatus = snapshot.child("LastMessage").child(email).child("status").getValue().toString();
+                                        lastMessageStatus = snapshot.child("LastMessage").child(email).child("MessageStatus").getValue().toString();
                                     }
                                     else
                                     {
