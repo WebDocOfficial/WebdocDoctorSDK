@@ -22,4 +22,7 @@ public class Global {
     public static DatabaseReference seenReference;
     public static ValueEventListener seenListener;
 
+    public static DatabaseReference lastMessageSeenReference;
+    public static ValueEventListener lastMessageSeenListener;
+
 }

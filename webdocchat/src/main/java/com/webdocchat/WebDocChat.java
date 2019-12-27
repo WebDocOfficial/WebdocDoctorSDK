@@ -188,7 +188,8 @@ public class WebDocChat {
     {
         final DatabaseReference reference = firebaseDatabase.getReference();
 
-        reference.child("Users").child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).addValueEventListener(new ValueEventListener() {
+        Global.lastMessageSeenReference = reference.child("Users").child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail);
+        Global.lastMessageSeenListener = Global.lastMessageSeenReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot)
             {
@@ -210,6 +211,11 @@ public class WebDocChat {
 
             }
         });
+    }
+
+    public static void stoplastMessageSeenStatus()
+    {
+        Global.lastMessageSeenReference.removeEventListener(Global.lastMessageSeenListener);
     }
 
 
