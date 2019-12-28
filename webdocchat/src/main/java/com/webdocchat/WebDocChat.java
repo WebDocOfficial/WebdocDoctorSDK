@@ -773,7 +773,8 @@ public class WebDocChat {
         }
     }
 
-    private static String getTime(long neededTimeMilis) {
+    private static String getTime(long neededTimeMilis)
+    {
         Calendar nowTime = Calendar.getInstance();
         Calendar neededTime = Calendar.getInstance();
         neededTime.setTimeInMillis(neededTimeMilis);
@@ -784,11 +785,11 @@ public class WebDocChat {
 
                 if (neededTime.get(Calendar.DATE) - nowTime.get(Calendar.DATE) == 1) {
                     //here return like "Tomorrow at 12:00"
-                    return "Tomorrow at " + DateFormat.format("HH:mm", neededTime);
+                    return "Tomorrow at " + DateFormat.format("hh:mm a", neededTime);
 
                 } else if (nowTime.get(Calendar.DATE) == neededTime.get(Calendar.DATE)) {
                     //here return like "Today at 12:00"
-                    return String.valueOf(DateFormat.format("hh:mm", neededTime));
+                    return String.valueOf(DateFormat.format("hh:mm a", neededTime));
 
                 } else if (nowTime.get(Calendar.DATE) - neededTime.get(Calendar.DATE) == 1) {
                     //here return like "Yesterday at 12:00"
@@ -796,17 +797,17 @@ public class WebDocChat {
 
                 } else {
                     //here return like "May 31, 12:00"
-                    return DateFormat.format("MMMM d, HH:mm", neededTime).toString();
+                    return DateFormat.format("MMMM d, hh:mm a", neededTime).toString();
                 }
 
             } else {
                 //here return like "May 31, 12:00"
-                return DateFormat.format("MMMM d, HH:mm", neededTime).toString();
+                return DateFormat.format("MMMM d, hh:mm a", neededTime).toString();
             }
 
         } else {
             //here return like "May 31 2010, 12:00" - it's a different year we need to show it
-            return DateFormat.format("MMMM dd yyyy, HH:mm", neededTime).toString();
+            return DateFormat.format("MMMM dd yyyy, hh:mm a", neededTime).toString();
         }
     }
 
