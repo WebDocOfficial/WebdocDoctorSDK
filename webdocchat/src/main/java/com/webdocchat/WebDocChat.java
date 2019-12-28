@@ -3,6 +3,7 @@ package com.webdocchat;
 import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.text.format.DateFormat;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
@@ -625,53 +626,7 @@ public class WebDocChat {
                                         lastMessageSender = snapshot.child("LastMessage").child(email).child("sender").getValue().toString();
                                         lastMessageReceiver = snapshot.child("LastMessage").child(email).child("receiver").getValue().toString();
                                         lastMessageStatus = snapshot.child("LastMessage").child(email).child("MessageStatus").getValue().toString();
-
-                                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy hh:mm:ss aa", Locale.ENGLISH);
-
-                                        //One day added
-                                        Calendar c = Calendar.getInstance();
-                                        try {
-                                            c.setTime(sdf.parse(lastMessageTimestamp));
-                                        } catch (ParseException e) {
-                                            e.printStackTrace();
-                                        }
-                                        c.add(Calendar.DATE, 1);  // number of days to add
-
-                                        String oneDayAdded = getDate(Long.parseLong(sdf.format(c.getTime())));
-
-                                    /* Date Splitter */
-                                        String userActiveDate = getDate(Long.parseLong(lastMessageTimestamp));
-
-                                    /*Time Splitter */
-                                        String userActiveTime = getTime(Long.parseLong(lastMessageTimestamp));
-
-                                        Date date = new Date() ;
-                                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
-                                        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
-                                        try {
-                                            if(dateFormat.parse(dateFormat.format(date)).equals(dateFormat.parse(userActiveDate)))
-                                            {
-                                                if(timeFormat.parse(timeFormat.format(date)).before(timeFormat.parse("23:59:59")))
-                                                {
-                                                    lastMessageTime = userActiveTime;
-                                                }
-                                            }
-                                            else if(dateFormat.parse(dateFormat.format(date)).equals(dateFormat.parse(oneDayAdded)))
-                                            {
-                                                if(timeFormat.parse(timeFormat.format(date)).before(timeFormat.parse("23:59:59")))
-                                                {
-                                                    //tvUserStatus.setText("Last seen yesterday at " + userActiveTime);
-                                                    lastMessageTime = "yesterday";
-                                                }
-                                            }
-                                            else if(dateFormat.parse(dateFormat.format(date)).after(dateFormat.parse(oneDayAdded)))
-                                            {
-                                                //tvUserStatus.setText("Last seen at " + userActiveDate);
-                                                lastMessageTime = userActiveTime;
-                                            }
-                                        } catch (ParseException e) {
-                                            e.printStackTrace();
-                                        }
+                                        lastMessageTime = getTime(Long.parseLong(lastMessageTimestamp));
                                     }
                                     else
                                     {
@@ -818,23 +773,40 @@ public class WebDocChat {
         }
     }
 
-    public static String getDate(long timestamp){
-        try{
-            Date netDate = (new Date(timestamp));
-            SimpleDateFormat sfd = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
-            return sfd.format(netDate);
-        } catch(Exception e) {
-            return "date";
-        }
-    }
+    private static String getTime(long neededTimeMilis) {
+        Calendar nowTime = Calendar.getInstance();
+        Calendar neededTime = Calendar.getInstance();
+        neededTime.setTimeInMillis(neededTimeMilis);
 
-    public static String getTime(long timestamp){
-        try{
-            Date netDate = (new Date(timestamp));
-            SimpleDateFormat sfd = new SimpleDateFormat("hh:mm:ss aa", Locale.ENGLISH);
-            return sfd.format(netDate);
-        } catch(Exception e) {
-            return "time";
+        if ((neededTime.get(Calendar.YEAR) == nowTime.get(Calendar.YEAR))) {
+
+            if ((neededTime.get(Calendar.MONTH) == nowTime.get(Calendar.MONTH))) {
+
+                if (neededTime.get(Calendar.DATE) - nowTime.get(Calendar.DATE) == 1) {
+                    //here return like "Tomorrow at 12:00"
+                    return "Tomorrow at " + DateFormat.format("HH:mm", neededTime);
+
+                } else if (nowTime.get(Calendar.DATE) == neededTime.get(Calendar.DATE)) {
+                    //here return like "Today at 12:00"
+                    return "Today at " + DateFormat.format("HH:mm", neededTime);
+
+                } else if (nowTime.get(Calendar.DATE) - neededTime.get(Calendar.DATE) == 1) {
+                    //here return like "Yesterday at 12:00"
+                    return "Yesterday at " + DateFormat.format("HH:mm", neededTime);
+
+                } else {
+                    //here return like "May 31, 12:00"
+                    return DateFormat.format("MMMM d, HH:mm", neededTime).toString();
+                }
+
+            } else {
+                //here return like "May 31, 12:00"
+                return DateFormat.format("MMMM d, HH:mm", neededTime).toString();
+            }
+
+        } else {
+            //here return like "May 31 2010, 12:00" - it's a different year we need to show it
+            return DateFormat.format("MMMM dd yyyy, HH:mm", neededTime).toString();
         }
     }
 
