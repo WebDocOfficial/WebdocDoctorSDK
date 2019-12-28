@@ -788,11 +788,11 @@ public class WebDocChat {
 
                 } else if (nowTime.get(Calendar.DATE) == neededTime.get(Calendar.DATE)) {
                     //here return like "Today at 12:00"
-                    return "Today at " + DateFormat.format("HH:mm", neededTime);
+                    return String.valueOf(DateFormat.format("hh:mm", neededTime));
 
                 } else if (nowTime.get(Calendar.DATE) - neededTime.get(Calendar.DATE) == 1) {
                     //here return like "Yesterday at 12:00"
-                    return "Yesterday at " + DateFormat.format("HH:mm", neededTime);
+                    return "yesterday";
 
                 } else {
                     //here return like "May 31, 12:00"
