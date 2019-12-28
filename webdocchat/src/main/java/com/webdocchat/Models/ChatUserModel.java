@@ -18,6 +18,7 @@ public class ChatUserModel {
     private String lastMessageSender;
     private String lastMessageReceiver;
     private String lastMessageStatus;
+    private String lastMessageTime;
 
     public String getName() {
         return name;
@@ -86,4 +87,8 @@ public class ChatUserModel {
     public String getLastMessageStatus() { return lastMessageStatus; }
 
     public void setLastMessageStatus(String lastMessageStatus) { this.lastMessageStatus = lastMessageStatus; }
+
+    public String getLastMessageTime() { return lastMessageTime; }
+
+    public void setLastMessageTime(String lastMessageTime) { this.lastMessageTime = lastMessageTime; }
 }

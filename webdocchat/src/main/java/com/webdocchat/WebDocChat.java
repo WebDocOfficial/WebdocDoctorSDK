@@ -37,8 +37,10 @@ import com.webdocchat.NotificationManager.Token;
 import com.webdocchat.TimeAgo.TimeAgo;
 
 import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -593,7 +595,7 @@ public class WebDocChat {
 
                                 Global.ChatUsersList.clear();
 
-                                String unreadMessageCounter, lastMessageTimestamp, lastMessageType, lastMessage, lastMessageSender, lastMessageReceiver, lastMessageStatus;
+                                String unreadMessageCounter, lastMessageTimestamp, lastMessageType, lastMessage, lastMessageSender, lastMessageReceiver, lastMessageStatus, lastMessageTime = null;
 
                                 for (DataSnapshot snapshot : dataSnapshot.getChildren())
                                 {
@@ -623,6 +625,53 @@ public class WebDocChat {
                                         lastMessageSender = snapshot.child("LastMessage").child(email).child("sender").getValue().toString();
                                         lastMessageReceiver = snapshot.child("LastMessage").child(email).child("receiver").getValue().toString();
                                         lastMessageStatus = snapshot.child("LastMessage").child(email).child("MessageStatus").getValue().toString();
+
+                                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy hh:mm:ss aa", Locale.ENGLISH);
+
+                                        //One day added
+                                        Calendar c = Calendar.getInstance();
+                                        try {
+                                            c.setTime(sdf.parse(lastMessageTimestamp));
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                        }
+                                        c.add(Calendar.DATE, 1);  // number of days to add
+
+                                        String oneDayAdded = getDate(Long.parseLong(sdf.format(c.getTime())));
+
+                                    /* Date Splitter */
+                                        String userActiveDate = getDate(Long.parseLong(lastMessageTimestamp));
+
+                                    /*Time Splitter */
+                                        String userActiveTime = getTime(Long.parseLong(lastMessageTimestamp));
+
+                                        Date date = new Date() ;
+                                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
+                                        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
+                                        try {
+                                            if(dateFormat.parse(dateFormat.format(date)).equals(dateFormat.parse(userActiveDate)))
+                                            {
+                                                if(timeFormat.parse(timeFormat.format(date)).before(timeFormat.parse("23:59:59")))
+                                                {
+                                                    lastMessageTime = userActiveTime;
+                                                }
+                                            }
+                                            else if(dateFormat.parse(dateFormat.format(date)).equals(dateFormat.parse(oneDayAdded)))
+                                            {
+                                                if(timeFormat.parse(timeFormat.format(date)).before(timeFormat.parse("23:59:59")))
+                                                {
+                                                    //tvUserStatus.setText("Last seen yesterday at " + userActiveTime);
+                                                    lastMessageTime = "yesterday";
+                                                }
+                                            }
+                                            else if(dateFormat.parse(dateFormat.format(date)).after(dateFormat.parse(oneDayAdded)))
+                                            {
+                                                //tvUserStatus.setText("Last seen at " + userActiveDate);
+                                                lastMessageTime = userActiveTime;
+                                            }
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                        }
                                     }
                                     else
                                     {
@@ -632,6 +681,7 @@ public class WebDocChat {
                                         lastMessageSender = "no_sender";
                                         lastMessageReceiver = "no_receiver";
                                         lastMessageStatus = "no_status";
+                                        lastMessageTime = "no_time";
                                     }
 
                                     user.setUnreadMessageCounter(unreadMessageCounter);
@@ -641,6 +691,8 @@ public class WebDocChat {
                                     user.setLastMessageSender(lastMessageSender);
                                     user.setLastMessageReceiver(lastMessageReceiver);
                                     user.setLastMessageStatus(lastMessageStatus);
+                                    user.setLastMessageTime(lastMessageTime);
+                                    
 
                                     for (int i = 0; i < Global.chatIDs.size(); i++)
                                     {
@@ -763,6 +815,26 @@ public class WebDocChat {
         catch (IllegalStateException e)
         {
             return FirebaseApp.getInstance("WebDocDoctorSDK");
+        }
+    }
+
+    public static String getDate(long timestamp){
+        try{
+            Date netDate = (new Date(timestamp));
+            SimpleDateFormat sfd = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
+            return sfd.format(netDate);
+        } catch(Exception e) {
+            return "date";
+        }
+    }
+
+    public static String getTime(long timestamp){
+        try{
+            Date netDate = (new Date(timestamp));
+            SimpleDateFormat sfd = new SimpleDateFormat("hh:mm:ss aa", Locale.ENGLISH);
+            return sfd.format(netDate);
+        } catch(Exception e) {
+            return "time";
         }
     }
 
