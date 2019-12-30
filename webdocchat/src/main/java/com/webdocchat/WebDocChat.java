@@ -185,11 +185,9 @@ public class WebDocChat {
                     hashMap.put("type", "typing");
                     hashMap.put("message", "typing...");
 
-                    if(!Global.lastMessageType.equalsIgnoreCase("typing"))
-                    {
-                        Global.lastMessage = dataSnapshot.child("message").getValue().toString();
-                        Global.lastMessageType = dataSnapshot.child("type").getValue().toString();
-                    }
+                    Global.lastMessage = dataSnapshot.child("message").getValue().toString();
+                    Global.lastMessageType = dataSnapshot.child("type").getValue().toString();
+
 
                     reference.getReference().child("Users").child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).updateChildren(hashMap);
                 }
