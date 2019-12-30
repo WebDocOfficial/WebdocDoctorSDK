@@ -25,7 +25,7 @@ public class Global {
     public static DatabaseReference lastMessageSeenReference;
     public static ValueEventListener lastMessageSeenListener;
 
-    public static String lastMessage;
+    public static String lastMessage = "null";
     public static String lastMessageType = "null";
 
 }

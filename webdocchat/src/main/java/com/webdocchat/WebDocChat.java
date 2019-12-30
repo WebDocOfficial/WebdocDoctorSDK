@@ -219,7 +219,9 @@ public class WebDocChat {
             {
                 if(dataSnapshot.hasChild("message"))
                 {
-                    if(Global.lastMessageType != null)
+                    String lastMessageType = dataSnapshot.child("type").getValue().toString();
+
+                    if(lastMessageType.equalsIgnoreCase("typing"))
                     {
                         final HashMap<String, Object> hashMap = new HashMap<String, Object>();
                         hashMap.put("type", Global.lastMessageType);
