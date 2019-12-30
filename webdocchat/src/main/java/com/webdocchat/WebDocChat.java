@@ -175,16 +175,16 @@ public class WebDocChat {
         FirebaseApp appReference = firebaseAppReference(context);
         final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
 
-        final HashMap<String, Object> hashMap = new HashMap<String, Object>();
-        hashMap.put("type", "typing");
-        hashMap.put("message", "typing...");
-
         reference.getReference().child("Users").child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 if(dataSnapshot.hasChild("message"))
                 {
+                    final HashMap<String, Object> hashMap = new HashMap<String, Object>();
+                    hashMap.put("type", "typing");
+                    hashMap.put("message", "typing...");
+
                     if(Global.lastMessageType != null && !Global.lastMessageType.equalsIgnoreCase("typing"))
                     {
                         Global.lastMessage = dataSnapshot.child("message").getValue().toString();
@@ -210,16 +210,16 @@ public class WebDocChat {
         FirebaseApp appReference = firebaseAppReference(context);
         final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
 
-        final HashMap<String, Object> hashMap = new HashMap<String, Object>();
-        hashMap.put("type", Global.lastMessageType);
-        hashMap.put("message", Global.lastMessage);
-
         reference.getReference().child("Users").child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot)
             {
                 if(dataSnapshot.hasChild("message"))
                 {
+                    final HashMap<String, Object> hashMap = new HashMap<String, Object>();
+                    hashMap.put("type", Global.lastMessageType);
+                    hashMap.put("message", Global.lastMessage);
+
                     reference.getReference().child("Users").child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).updateChildren(hashMap);
                 }
             }
