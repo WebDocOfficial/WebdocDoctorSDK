@@ -797,17 +797,17 @@ public class WebDocChat {
 
                 } else {
                     //here return like "May 31, 12:00"
-                    return DateFormat.format("MMMM d, hh:mm a", neededTime).toString();
+                    return DateFormat.format("dd/MM/yyyy", neededTime).toString();
                 }
 
             } else {
                 //here return like "May 31, 12:00"
-                return DateFormat.format("MMMM d, hh:mm a", neededTime).toString();
+                return DateFormat.format("dd/MM/yyyy", neededTime).toString();
             }
 
         } else {
             //here return like "May 31 2010, 12:00" - it's a different year we need to show it
-            return DateFormat.format("MMMM dd yyyy, hh:mm a", neededTime).toString();
+            return DateFormat.format("dd/MM/yyyy", neededTime).toString();
         }
     }
 
