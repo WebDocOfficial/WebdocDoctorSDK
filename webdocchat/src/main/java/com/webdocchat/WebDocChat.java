@@ -216,11 +216,14 @@ public class WebDocChat {
             {
                 if(dataSnapshot.hasChild("message"))
                 {
-                    final HashMap<String, Object> hashMap = new HashMap<String, Object>();
-                    hashMap.put("type", Global.lastMessageType);
-                    hashMap.put("message", Global.lastMessage);
+                    if(Global.lastMessageType != null)
+                    {
+                        final HashMap<String, Object> hashMap = new HashMap<String, Object>();
+                        hashMap.put("type", Global.lastMessageType);
+                        hashMap.put("message", Global.lastMessage);
 
-                    reference.getReference().child("Users").child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).updateChildren(hashMap);
+                        reference.getReference().child("Users").child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).updateChildren(hashMap);
+                    }
                 }
             }
 
