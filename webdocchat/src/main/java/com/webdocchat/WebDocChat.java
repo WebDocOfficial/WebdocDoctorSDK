@@ -170,6 +170,67 @@ public class WebDocChat {
         });
     }
 
+    public static void userIsTyping(Context context, final String senderAppName, final String senderEmail, final String receiverEmail)
+    {
+        FirebaseApp appReference = firebaseAppReference(context);
+        final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
+
+        final HashMap<String, Object> hashMap = new HashMap<String, Object>();
+        hashMap.put("type", "typing");
+        hashMap.put("message", "typing...");
+
+        reference.getReference().child("Users").child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                if(dataSnapshot.hasChild("message"))
+                {
+                    if(Global.lastMessageType != null && !Global.lastMessageType.equalsIgnoreCase("typing"))
+                    {
+                        Global.lastMessage = dataSnapshot.child("message").getValue().toString();
+                        Global.lastMessageType = dataSnapshot.child("type").getValue().toString();
+                    }
+
+                    reference.getReference().child("Users").child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).updateChildren(hashMap);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        //reference.getReference().child("Users").child(receiverAppName).child(receiverEmail).child("LastMessage").child(senderEmail).updateChildren(hashMap);
+    }
+
+    public static void userStoppedTyping(Context context, final String senderAppName, final String senderEmail, final String receiverEmail)
+    {
+        FirebaseApp appReference = firebaseAppReference(context);
+        final FirebaseDatabase reference = FirebaseDatabase.getInstance(appReference);
+
+        final HashMap<String, Object> hashMap = new HashMap<String, Object>();
+        hashMap.put("type", Global.lastMessageType);
+        hashMap.put("message", Global.lastMessage);
+
+        reference.getReference().child("Users").child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                if(dataSnapshot.hasChild("message"))
+                {
+                    reference.getReference().child("Users").child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).updateChildren(hashMap);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     private static void lastMessage(FirebaseDatabase firebaseDatabase, String senderAppName, String receiverAppName, String senderEmail, String receiverEmail, String messageType, String message)
     {
         DatabaseReference reference = firebaseDatabase.getReference("Users");
@@ -206,7 +267,7 @@ public class WebDocChat {
                         final HashMap<String, Object> hashMap = new HashMap<String, Object>();
                         hashMap.put("MessageStatus", "seen");
 
-                    /* For last message sent and seen status */
+                        /* For last message sent and seen status */
                         reference.getReference().child("Users").child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).updateChildren(hashMap);
                         reference.getReference().child("Users").child(receiverAppName).child(receiverEmail).child("LastMessage").child(senderEmail).updateChildren(hashMap);
                     }
