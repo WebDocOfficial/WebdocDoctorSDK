@@ -188,12 +188,12 @@ public class WebDocChat {
                     String lastMessage = dataSnapshot.child("message").getValue().toString();
                     String lastMessageType = dataSnapshot.child("type").getValue().toString();
 
-                    if(!Global.lastMessageType.equalsIgnoreCase("typing"))
+                    if(!lastMessageType.equalsIgnoreCase("typing"))
                     {
                         Global.lastMessage = lastMessage;
                         Global.lastMessageType = lastMessageType;
                     }
-                    
+
                     reference.getReference().child("Users").child(senderAppName).child(senderEmail).child("LastMessage").child(receiverEmail).updateChildren(hashMap);
                 }
 
