@@ -223,7 +223,7 @@ public class WebDocChat {
 
                     if(lastMessageType.equalsIgnoreCase("typing"))
                     {
-                        if(Global.lastMessageType != null)
+                        if(Global.lastMessageType != null && Global.lastMessage != null)
                         {
                             final HashMap<String, Object> hashMap = new HashMap<String, Object>();
                             hashMap.put("type", Global.lastMessageType);
